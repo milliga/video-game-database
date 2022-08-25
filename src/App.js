@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { Component, useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import { getGames, } from './api/index';
+
+import { Header } from './Components/Header/Header';
+import { GameList } from './Components/GameList/GameList';
+import { Game } from './Components/Game/Game';
+import { GameContext } from './Contexts/GameContext'
+
+const App = () => {
+    const [selectedGame, setSelectedGame] = useState({});
+
+    return (
+        <>
+        <GameContext.Provider value={{ selectedGame, setSelectedGame }}>
+            <Router>
+                <Header />
+                <Routes>
+                    <Route exact path='/' element={<GameList />} />
+                    <Route path={`/game`} element={<Game />}/>
+                </Routes>
+            </Router>
+        </GameContext.Provider>
+        </>
+    );
+};
 
 export default App;
