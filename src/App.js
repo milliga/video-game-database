@@ -17,8 +17,8 @@ const App = () => {
             <Router>
                 <Header />
                 <Routes>
-                    <Route exact path='/' element={<GameList />} />
-                    <Route path={`/game`} element={<Game />}/>
+                    <Route path='/' element={<GameList />} />
+                    <Route path='/game/' element={<Game />}/>
                 </Routes>
             </Router>
         </GameContext.Provider>

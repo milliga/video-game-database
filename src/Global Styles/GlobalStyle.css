@@ -2,3 +2,16 @@
     background-size: cover;
     background-color: rgb(245, 237, 237);
 }
+
+img, .drop-shadow {
+    margin-top: -10px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 4px 4px 10px hsl(0deg 0% 0% / 0.7);
+}
+
+img {
+    position: relative;
+}

@@ -14,15 +14,25 @@ export const Game = () => {
     const { selectedGame } = useContext(GameContext);
 
     useEffect(() => {
-        getGameDetails(selectedGame.id).then(game => setGameDetails(game.data))
+        getGameDetails(parseInt(selectedGame.id)).then(game => setGameDetails(game.data));
     }, [])
 
     return (
         <div className='container background'>
             <img className='background-image' src={gameDetails.background_image} />
-            <div className='game-info'>
+            <div className='game-info drop-shadow'>
                 <h2 className='game-title'>{gameDetails.name}</h2>
-                <h4>{gameDetails.description_raw}</h4>
+                <div className='break'></div>
+                <div className='genre-container'>
+                    {gameDetails.genres?.map((genre, i) => (
+                        <p key={i} className='genre'>{genre.name}</p>
+                    ))}
+                </div>
+                <div className='developer-container'>
+                    {gameDetails.developers?.map((dev, i) => (
+                        <p key={i} className='developer'>{dev.name}</p>
+                    ))}
+                </div>
             </div>
         </div>
     )

@@ -30,14 +30,15 @@ export const GameList = () => {
         Promise.all([requests]).then(() => setIsLoading(false));
     }, [page])
 
+
     const handleShowMoreClick = (e) => {
         setPage(parseInt(e.target.id) + parseInt(1));
-        console.log(page);
     }
 
     const addGenre = (e) => {
         setGenres(genre => [...genres, e.target.id]);
     }
+
     
     return (
         <div>
@@ -55,7 +56,6 @@ export const GameList = () => {
                                     <div className='info'>
                                         <p className='name'>{game.name.length < 45 ? game.name.trim() : game.name.substring(0, 45).trim() + '...'}</p>
                                         <div className='rating-container'>
-                                            {/*console.log(game)*/}
                                             <StarRateIcon className='star-icon' fontSize='small'/>
                                             <p className='rating'>{game.rating}</p>
                                         </div>
