@@ -22,10 +22,12 @@ export const GameList = () => {
     const { setSelectedGame } = useContext(GameContext);
     
     useEffect(() => {
+        {/*set loading to true so page only shows loading icon until api finishes it's async call*/}
         setIsLoading(true);
     }, [])
 
     useEffect(() => {
+        {/*ensure api call is finished when page is loaded/changed so loading icon can show if api call is not finished*/}
         const requests = getGames(page, 50).then(items => setGames([...games, items.data.results]));
         Promise.all([requests]).then(() => setIsLoading(false));
     }, [page])
@@ -44,16 +46,13 @@ export const GameList = () => {
         <div>
             {!isLoading ? (
                 <>
-                    {/* <div className='filter background'>
-                        <input type='checkbox' onClick={addGenre} id='Action'></input><p>Action</p>
-                    </div> */}
-                    
                     <div className='grid-container background'>
                         {games.map((key) => (
                             key.map((game) => (
                                 <div key={game.id} className="game">
                                     <Link onClick={() => setSelectedGame(game)} to={`/game?id=${game.id}`}><img className='zoom' src={game.background_image} alt={game.name}/></Link>
                                     <div className='info'>
+                                        {/*force string to not show past 45 characters to consistently keep style of each game card showing in game list component*/}
                                         <p className='name'>{game.name.length < 45 ? game.name.trim() : game.name.substring(0, 45).trim() + '...'}</p>
                                         <div className='rating-container'>
                                             <StarRateIcon className='star-icon' fontSize='small'/>
@@ -64,6 +63,7 @@ export const GameList = () => {
                             ))
                         ))}
                     </div>
+                    {/*update page state to call next page in api call by calling handleShowMoreClick which increases page state by 1*/}
                     <div className='pages background'>
                         <button onClick={handleShowMoreClick} type='button' className='btn btn-dark' id={parseInt(page)}>Show More</button>
                     </div>
