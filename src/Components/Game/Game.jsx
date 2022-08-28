@@ -20,8 +20,9 @@ export const Game = () => {
 
     return (
         <div className='container background'>
-            <img className='background-image' src={gameDetails.background_image} />
+            <img className='background-image' src={gameDetails.background_image} alt={gameDetails.name}/>
             <div className='game-info drop-shadow'>
+                {console.log(gameDetails)}
                 <h2 className='game-title'>{gameDetails.name}</h2>
                 <div className='break'></div>
                 {/*show information from game clicked*/}
@@ -45,6 +46,18 @@ export const Game = () => {
                     show and link to store(s)
                 */}
                 <div className='break' />
+                <div className='publisher-container'>
+                    <h3 className='publisher-rating-title'>Publishers</h3>
+                    {gameDetails.publishers?.map((publisher, i) => (
+                        <p key={i} className='publisher'>{publisher.name}</p>
+                    ))}
+                </div>
+                <div className='rating-container'>
+                    <h3 className='publisher-rating-title'>Ratings</h3>
+                    <p className='rating'>User Rating: {gameDetails.rating}/5</p>
+                    <p className='rating'>Metacritic Rating: {gameDetails.metacritic}/100</p>
+                </div>
+                <div className='break' />
                 <div className='tag-container'>
                     <h3 className='tag-title'>Tags</h3>
                     {gameDetails.tags?.map((tag, i) => (
@@ -53,7 +66,6 @@ export const Game = () => {
                 </div>
                 <div className='description-container'>
                     <div className='break' />
-                    {console.log(gameDetails)}
                     <div className='description' dangerouslySetInnerHTML={{ __html: gameDetails.description}} />
                 </div>
             </div>

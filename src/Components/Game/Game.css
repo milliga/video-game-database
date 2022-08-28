@@ -7,9 +7,10 @@
 }
 
 .background-image {
+    object-fit: cover;
     margin-top: 0px;
-    width: 1000px;
-    height: 600px;
+    width: 80%;
+    height: 30%;
 }
 
 .game-info {
@@ -19,8 +20,8 @@
     margin-left: 5%;
     margin-top: 0px;
     margin-bottom: 3%;
-    width: 600px;
-    height: 90%;
+    max-width: 35vw;
+    max-height: 90%;
     border: 3px solid;
     border-color: hsl(0deg 0% 0% / 0.0);
     border-radius: 20px;
@@ -34,14 +35,15 @@
 
 .genre-container {
     display: flex;
-    flex-wrap: inherit;
+    flex-wrap: wrap;
     justify-content: left;
     padding-right: 10px;
     padding-left: 10px;
     min-width: 50%;
-    max-width: 50%;
+    max-width: 100%;
     height: 0%;
-    text-align: left;
+    text-align: center;
+    flex-grow: 1;
 }
 
 .genre {
@@ -54,12 +56,21 @@
 
 .developer-container {
     display: flex;
-    justify-content: right;
     flex-wrap: wrap;
-    min-width: 50%;
+    justify-content: left;
+    padding-right: 10px;
+    padding-left: 10px;
+    min-width: 0%;
     max-width: 50%;
     height: 0%;
-    text-align: right;
+    text-align: center;
+    flex-grow: 1;
+}
+
+@media only screen and (max-width: 1708px) {
+    .developer-container {
+        border-left: none;
+    }
 }
 
 .developer {
@@ -73,9 +84,9 @@
 .break {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     flex-basis: 100%;
     border-bottom: 1px solid #CCC;
-    border-radius: 5px;
     margin-bottom: 15px;
     margin-left: 15px;
     margin-right: 15px;
@@ -125,3 +136,60 @@
     padding: 4px 5px 8px 5px;
     margin: 5px 10px 15px 0px;
 }
+
+.publisher-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    padding-right: 10px;
+    padding-left: 10px;
+    min-width: 50%;
+    max-width: 100%;
+    height: 0%;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.publisher {
+    display: flex;
+    background-color: hsl(0deg 0% 0% / 0.2);
+    border-radius: 5px;
+    padding: 4px 5px 8px 5px;
+    margin: 5px 10px 15px 0px;
+}
+
+.rating-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    padding-right: 10px;
+    padding-left: 10px;
+    min-width: 0%;
+    max-width: 50%;
+    height: 0%;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.rating {
+    display: flex;
+    justify-content: left;
+    text-align: left;
+    flex-wrap: wrap;
+    font-size: large;
+    width: 100%;
+}
+
+.publisher-rating-title {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: -5px;
+}
+
+@media only screen and (max-width: 1405px) {
+    .rating-container {
+        border-left: none;
+    }
+}
+
