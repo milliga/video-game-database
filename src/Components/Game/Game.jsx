@@ -40,8 +40,6 @@ export const Game = () => {
                 </div>
                 {/* 
                     TO DO
-                    show rating
-                    show publishers
                     show screenshots and trailer
                     show and link to store(s)
                 */}
@@ -52,10 +50,10 @@ export const Game = () => {
                         <p key={i} className='publisher'>{publisher.name}</p>
                     ))}
                 </div>
-                <div className='rating-container'>
+                <div className='game-rating-container'>
                     <h3 className='publisher-rating-title'>Ratings</h3>
-                    <p className='rating'>User Rating: {gameDetails.rating}/5</p>
-                    <p className='rating'>Metacritic Rating: {gameDetails.metacritic}/100</p>
+                    <p className='game-rating'>User Rating: {gameDetails.rating}/5</p>
+                    <p className='game-rating'>Metacritic Rating: {gameDetails.metacritic}/100</p>
                 </div>
                 <div className='break' />
                 <div className='tag-container'>
