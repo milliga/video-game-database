@@ -1,11 +1,12 @@
 import axios from "axios";
 
-export const getGames = async (pageNumber, pageSize) => {
+export const getGames = async (pageNumber, pageSize, searchText) => {
     try {
         const data = await axios.get(`https://rawg-video-games-database.p.rapidapi.com/games?key=${process.env.REACT_APP_RAWG_KEY}`, {
             params: {
                 page: pageNumber,
                 page_size: pageSize,
+                search: searchText,
             },
             headers: {
                 'X-RapidAPI-Key': process.env.REACT_APP_RAPIDAPI_KEY,

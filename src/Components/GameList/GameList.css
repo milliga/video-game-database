@@ -74,3 +74,13 @@
     width: 5%;
     animation: fa-spin 1.3s infinite linear;
 }
+
+.search-container {
+    display: flex;
+    justify-content: center;
+}
+
+.search {
+    padding: 30px 15px 15px 15px;
+    width: 50%;
+}
