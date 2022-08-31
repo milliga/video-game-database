@@ -1,16 +1,3 @@
-.zoom {
-    transition: .2s;
-}
-
-.zoom:hover {
-    transform: scale(1.3);
-    z-index: 1;
-    cursor: pointer;
-    background-position-x: 500px;
-    background: black;
-}
-
-
 .grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -59,20 +46,6 @@
 
 .filter {
     padding-left: 50px;
-}
-
-.loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-width: 100%;
-    min-height: 100vh;
-}
-
-.loading-icon {
-    height: 5%;
-    width: 5%;
-    animation: fa-spin 1.3s infinite linear;
 }
 
 .search-container {

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { getGames, getGenres, getGenreDetails, } from '../../api/index';
 import { GameContext } from '../../Contexts/GameContext';
+import { SearchContext } from '../../Contexts/SearchContext'
 
 import StarRateIcon from '@mui/icons-material/StarRate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -19,22 +20,19 @@ export const GameList = () => {
     const [page, setPage] = useState(1);
     const [genres, setGenres] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [searchText, setSearchText] = useState("");
     const [actionGenreChecked, setActionGenreChecked] = useState(false);
 
     const { setSelectedGame } = useContext(GameContext);
-    
-    useEffect(() => {
-        {/*set loading to true so page only shows loading icon until api finishes it's async call*/}
-        setIsLoading(true);
-        setSearchText("");
-    }, [])
+    const { searchText, setSearchText } = useContext(SearchContext);
 
     useEffect(() => {
-        {/*ensure api call is finished when page is loaded/changed so loading icon can show if api call is not finished*/}
+        {/*ensure api call is finished when page is loaded/changed so loading icon can show if api call is not finished, set search text to empty string and show loading section
+            while api is called*/}
+        setIsLoading(true);
+        setSearchText("");
         const requests = getGames(page, 50).then((item) => setGames([...games, item.data.results]));
         Promise.all([requests]).then(() => setIsLoading(false));
-    }, [page])
+    }, [])
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -59,15 +57,14 @@ export const GameList = () => {
 
     const handleSearchChange = (e) => {
         setIsLoading(true);
-        let lowerCaseSearch = e.target.value.toLowerCase();
-        setSearchText(lowerCaseSearch);
+        setSearchText(e.target.value);
     }
 
     const searchedGame = games.map((results) => (results.filter((searchableGame) => {
         if(searchText === '') {
             return searchableGame;
         }
-        else if(searchableGame.name.toLowerCase().includes(searchText)) {
+        else if(searchableGame.name.toLowerCase().includes(searchText.toLowerCase())) {
             return searchableGame;
         }
     })))
@@ -77,6 +74,7 @@ export const GameList = () => {
             <div className='search-container background'>
                 <div className='search'>
                     <TextField
+                        value={searchText}
                         id='outlined-basic'
                         onChange={handleSearchChange}
                         label='Search'
@@ -105,6 +103,7 @@ export const GameList = () => {
                         {searchedGame.map((item) => (
                             item.map((game) => (
                                 <div key={game.id} className="game">
+                                {console.log(game)}
                                 <Link onClick={() => setSelectedGame(game)} to={`/game?id=${game.id}`}><img className='zoom' src={game.background_image} alt={game.name}/></Link>
                                 <div className='info'>
                                     {/*force string to not show past 45 characters to consistently keep style of each game card showing in game list component*/}
@@ -128,7 +127,6 @@ export const GameList = () => {
                     <FontAwesomeIcon className='loading-icon' icon={faCircleNotch} />
                 </div>
             )}
-        </div>
-        
+        </div>  
     );
 };
