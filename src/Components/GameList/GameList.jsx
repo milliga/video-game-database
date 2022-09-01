@@ -121,6 +121,7 @@ export const GameList = () => {
                     <div className='pages background'>
                         <button onClick={handleShowMoreClick} type='button' className='btn btn-dark' id={parseInt(page)}>Show More</button>
                     </div>
+                    <div className='bottom background' />
                 </>
             ) : (
                 <div className='loading background'>

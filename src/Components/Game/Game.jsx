@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Game.css';
 import '../../Global Styles/GlobalStyle.css';
 
-import { getGameDetails, getGameScreenshots } from './../../api/index';
+import { getGameDetails, getGameScreenshots } from '../../api/index';
 import { GameContext } from '../../Contexts/GameContext';
 
 export const Game = () => {
@@ -35,7 +35,7 @@ export const Game = () => {
     }
 
     return (
-        <div>
+        <>
             {!isLoading ? (
                 <div className='container background'>
                     <div className='media-container'>
@@ -96,7 +96,7 @@ export const Game = () => {
                     <FontAwesomeIcon className='loading-icon' icon={faCircleNotch} />
                 </div>
             )}
-        </div>
-       
+        </>
     )
+    
 }
