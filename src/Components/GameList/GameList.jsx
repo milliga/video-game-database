@@ -8,6 +8,7 @@ import { SearchContext } from '../../Contexts/SearchContext'
 import StarRateIcon from '@mui/icons-material/StarRate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import Button from 'react-bootstrap/Button';
 
 import './GameList.css';
 import '../../Global Styles/GlobalStyle.css';
@@ -16,61 +17,63 @@ import { TextField } from '@mui/material';
 
 export const GameList = () => {
 
-    const [games, setGames] = useState([]);
-    const [page, setPage] = useState(1);
-    const [genres, setGenres] = useState([]);
+    const [games, setGames] = useState([{}]);
+    const [genresAndTags, setGenresAndTags] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [actionGenreChecked, setActionGenreChecked] = useState(false);
+    const [aboveThreePages, setAboveThreePages] = useState(false);
 
     const { setSelectedGame } = useContext(GameContext);
-    const { searchText, setSearchText } = useContext(SearchContext);
+    const { searchText, setSearchText, page, setPage } = useContext(SearchContext);
 
     useEffect(() => {
         {/*ensure api call is finished when page is loaded/changed so loading icon can show if api call is not finished, set search text to empty string and show loading section
             while api is called*/}
         setIsLoading(true);
         setSearchText("");
-        const requests = getGames(page, 50).then((item) => setGames([...games, item.data.results]));
+        if(page >= 3) { 
+            setAboveThreePages(true);
+        } else if (page < 3) {
+            setAboveThreePages(false);
+        }
+        const requests = Promise.resolve(getGames(page, 50).then((item) => setGames(item.data.results)));
         Promise.all([requests]).then(() => setIsLoading(false));
-    }, [])
+    }, [page])
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            const requests = getGames(page, 50, searchText).then((item) => setGames([...games, item.data.results]));
+            const requests = Promise.resolve(getGames(page, 50, searchText).then((item) => setGames(item.data.results)));
             Promise.all([requests]).then(() => setIsLoading(false));
         }, 500)
 
-        return () => clearTimeout(timer);
+        return () => { 
+            clearTimeout(timer); 
+        }
     }, [searchText])
+
+  /*   useEffect(() => {
+        console.log(games);
+    }, [isLoading]) */
 
     const handleShowMoreClick = (e) => {
         setPage(parseInt(e.target.id) + parseInt(1));
     }
 
-    const addGenre = (e) => {
-        setGenres(() => [...genres, e.target.id]);
+    const handlePageChange = (e) => {
+        setIsLoading(true);
+        setPage(parseInt(e.target.id));
     }
 
-    const handleGenreChange = (e) => {
-        setActionGenreChecked(!actionGenreChecked);
+    const handleGenreTagChange = (e) => {
+        setGenresAndTags(console.log(e));
     }
 
     const handleSearchChange = (e) => {
         setIsLoading(true);
         setSearchText(e.target.value);
     }
-
-    const searchedGame = games.map((results) => (results.filter((searchableGame) => {
-        if(searchText === '') {
-            return searchableGame;
-        }
-        else if(searchableGame.name.toLowerCase().includes(searchText.toLowerCase())) {
-            return searchableGame;
-        }
-    })))
     
     return (
-        <div>
+        <>
             <div className='search-container background'>
                 <div className='search'>
                     <TextField
@@ -100,10 +103,8 @@ export const GameList = () => {
                     </div>
                     */}
                     <div className='grid-container background'>
-                        {searchedGame.map((item) => (
-                            item.map((game) => (
-                                <div key={game.id} className="game">
-                                {console.log(game)}
+                        {games.map((game) => (
+                            <div key={game.id} className="game">
                                 <Link onClick={() => setSelectedGame(game)} to={`/game?id=${game.id}`}><img className='zoom' src={game.background_image} alt={game.name}/></Link>
                                 <div className='info'>
                                     {/*force string to not show past 45 characters to consistently keep style of each game card showing in game list component*/}
@@ -114,20 +115,36 @@ export const GameList = () => {
                                     </div>
                                 </div>
                             </div>
-                        ))))}
+                        ))}
                        
                     </div>
                     {/*update page state to call next page in api call by calling handleShowMoreClick which increases page state by 1*/}
                     <div className='pages background'>
-                        <button onClick={handleShowMoreClick} type='button' className='btn btn-dark' id={parseInt(page)}>Show More</button>
+                        {!aboveThreePages ? (
+                            <>
+                                <Button id={parseInt(page)} onClick={handlePageChange} variant="dark">1</Button>
+                                <Button id={parseInt(page) + 1} onClick={handlePageChange} variant="dark">2</Button>
+                                <Button id={parseInt(page) + 2} onClick={handlePageChange} variant="dark">3</Button>
+                                <Button id={parseInt(page) + 3} onClick={handlePageChange} variant="dark">4</Button>
+                                <Button id={parseInt(page) + 4} onClick={handlePageChange} variant="dark">5</Button>
+                            </>
+                        ) : (
+                            <>
+                                <Button id={parseInt(page)} onClick={handlePageChange} variant="dark">{parseInt(page) - 2}</Button>
+                                <Button id={parseInt(page) + 1} onClick={handlePageChange} variant="dark">{parseInt(page) - 1}</Button>
+                                <Button id={parseInt(page) + 2} onClick={handlePageChange} variant="dark">{parseInt(page)}</Button>
+                                <Button id={parseInt(page) + 3} onClick={handlePageChange} variant="dark">{parseInt(page) + 1}</Button>
+                                <Button id={parseInt(page) + 4} onClick={handlePageChange} variant="dark">{parseInt(page) + 2}</Button>
+                            </>
+                        )}
+                        
                     </div>
-                    <div className='bottom background' />
                 </>
             ) : (
                 <div className='loading background'>
                     <FontAwesomeIcon className='loading-icon' icon={faCircleNotch} />
                 </div>
             )}
-        </div>  
+        </>  
     );
 };

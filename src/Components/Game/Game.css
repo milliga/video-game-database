@@ -8,20 +8,22 @@
 
 .media-container {
     display: flex;
-    justify-content: left;
+    justify-content: center;
     flex-wrap: wrap;
-    width: 100%;
+    width: 60%;
     height: 50%;
     padding-right: 35px;
     padding-left: 20px;
+    flex: 1
 }
 
 .main-image {
     object-fit: cover;
-    margin-top: 20px;
+    margin-top: 0%;
     margin-bottom: 50px;
-    width: 1200px;
-    height: 650px;
+    max-width: 100%;
+    height: auto;
+    width: auto;
 }
 
 .small-image {

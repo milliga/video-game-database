@@ -9,10 +9,11 @@ import './Header.css';
 
 export const Header = () => {
 
-    const { searchText, setSearchText } = useContext(SearchContext);
+    const { searchText, setSearchText, page, setPage } = useContext(SearchContext);
 
     const handleHomeClick = (e) => {
         setSearchText("");
+        setPage(1);
     }
 
     return (

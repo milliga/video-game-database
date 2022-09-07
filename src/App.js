@@ -12,11 +12,12 @@ import { SearchContext } from './Contexts/SearchContext'
 const App = () => {
     const [selectedGame, setSelectedGame] = useState({});
     const [searchText, setSearchText] = useState("");
+    const [page, setPage] = useState(1);
 
     return (
         <>
         <GameContext.Provider value={{ selectedGame, setSelectedGame }}>
-            <SearchContext.Provider value={{ searchText, setSearchText }}>
+            <SearchContext.Provider value={{ searchText, setSearchText, page, setPage }}>
                 <Router>
                     <Header />
                     <Routes>

@@ -20,8 +20,8 @@ export const Game = () => {
     useEffect(() => {
         {/*api call to get data using ID from context then set local state for game details. selectedGame does not provide the same information as the getGameDetails api call*/}
         setIsLoading(true);
-        const firstRequest = getGameDetails(parseInt(selectedGame.id)).then((game) => setGameDetails(game.data));
-        const secondRequest = getGameScreenshots(selectedGame.slug).then((screenshot) => setScreenshots(screenshot.data.results))
+        const firstRequest = Promise.resolve(getGameDetails(parseInt(selectedGame.id)).then((game) => setGameDetails(game.data)));
+        const secondRequest = Promise.resolve(getGameScreenshots(selectedGame.slug).then((screenshot) => setScreenshots(screenshot.data.results)));
         Promise.all([firstRequest, secondRequest]).then(() => setIsLoading(false));
     }, [])
 
@@ -39,7 +39,6 @@ export const Game = () => {
             {!isLoading ? (
                 <div className='container background'>
                     <div className='media-container'>
-                        {console.log(mainScreenshot)}
                         <img className='main-image' src={mainScreenshot?.image} alt={gameDetails.name}/>
                         {screenshots.map((screenshot, i) => (
                             <img key={i} onClick={changeMainScreenshot} className='small-image zoom' src={screenshot.image} alt={gameDetails.name} />
