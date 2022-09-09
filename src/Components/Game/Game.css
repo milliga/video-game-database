@@ -1,12 +1,14 @@
-.container {
+.game-container {
     display: flex;
     justify-content: center;
-    min-width: 100vw;
+    flex-wrap: wrap;
+    min-width: 100%;
     min-height: 100vh;
-    padding-top: 100px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
-.media-container {
+.screenshot-container {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -14,7 +16,7 @@
     height: 50%;
     padding-right: 35px;
     padding-left: 20px;
-    flex: 1
+    flex: 1;
 }
 
 .main-image {
@@ -209,3 +211,30 @@
     margin-top: -5px;
 }
 
+.video-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 20%;
+    background-size: cover;
+    background-color: black;
+    margin-bottom: 60px;
+}
+
+.video {
+    width: 50%;
+    height: 100%;
+}
+
+.no-video {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    height: auto;
+    width: 100%;
+    text-align: center;
+    font-size: x-large;
+    padding-top: 40px;
+    padding-bottom: 60px;
+}

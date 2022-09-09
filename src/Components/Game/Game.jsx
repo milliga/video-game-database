@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Game.css';
 import '../../Global Styles/GlobalStyle.css';
 
-import { getGameDetails, getGameScreenshots } from '../../api/index';
+import { getGameDetails, getGameScreenshots, getGameTrailers } from '../../api/index';
 import { GameContext } from '../../Contexts/GameContext';
 
 export const Game = () => {
@@ -14,6 +14,8 @@ export const Game = () => {
     const [screenshots, setScreenshots] = useState([]);
     const [mainScreenshot, setMainScreenshot] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+    const [trailers, setTrailers] = useState([]);
+    const [isMuted, setIsMuted] = useState(true);
 
     const { selectedGame } = useContext(GameContext);
 
@@ -22,7 +24,8 @@ export const Game = () => {
         setIsLoading(true);
         const firstRequest = Promise.resolve(getGameDetails(parseInt(selectedGame.id)).then((game) => setGameDetails(game.data)));
         const secondRequest = Promise.resolve(getGameScreenshots(selectedGame.slug).then((screenshot) => setScreenshots(screenshot.data.results)));
-        Promise.all([firstRequest, secondRequest]).then(() => setIsLoading(false));
+        const thirdRequest = Promise.resolve(getGameTrailers(selectedGame.id).then((trailer) => setTrailers(trailer.data.results)));
+        Promise.all([firstRequest, secondRequest, thirdRequest]).then(() => setIsLoading(false));
     }, [])
 
     useEffect(() => {
@@ -37,8 +40,19 @@ export const Game = () => {
     return (
         <>
             {!isLoading ? (
-                <div className='container background'>
-                    <div className='media-container'>
+                <div className='game-container background'>
+                    {trailers[0] == null ? 
+                        <div className='no-video background'>
+                            <span>No trailer found in API</span>
+                        </div> : 
+                        <div className='video-container'>
+                            <video className='video' muted={isMuted} autoPlay={true} controls>
+                                <source src={trailers[0].data.max.toString()} type='video/mp4' />
+                            </video>
+                        </div>
+                    }
+                    
+                    <div className='screenshot-container'>
                         <img className='main-image' src={mainScreenshot?.image} alt={gameDetails.name}/>
                         {screenshots.map((screenshot, i) => (
                             <img key={i} onClick={changeMainScreenshot} className='small-image zoom' src={screenshot.image} alt={gameDetails.name} />

@@ -75,13 +75,22 @@ export const getGameScreenshots = async (gamePk) => {
     try {
         const data = await axios.get(`https://rawg-video-games-database.p.rapidapi.com/games/${gamePk}/screenshots?key=${process.env.REACT_APP_RAWG_KEY}`, {
             params: {
-                game_pk: gamePk
+                game_pk: gamePk,
             },
             headers: {
                 'X-RapidAPI-Key': process.env.REACT_APP_RAPIDAPI_KEY,
                 'X-RapidAPI-Host': 'rawg-video-games-database.p.rapidapi.com',
             },
         });
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getGameTrailers = async (id) => {
+    try {
+        const data = await axios.get(`https://api.rawg.io/api/games/${id}/movies?key=${process.env.REACT_APP_RAWG_KEY}`)
         return data;
     } catch (error) {
         console.log(error);
