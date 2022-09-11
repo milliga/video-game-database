@@ -1,3 +1,4 @@
+import { Rating } from "@mui/material";
 import axios from "axios";
 
 export const getGames = async (pageNumber, pageSize, searchText) => {
@@ -6,6 +7,7 @@ export const getGames = async (pageNumber, pageSize, searchText) => {
             params: {
                 page: pageNumber,
                 page_size: pageSize,
+                search_exact: true,
                 search: searchText,
             },
             headers: {
