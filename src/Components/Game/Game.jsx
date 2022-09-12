@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Game.css';
 import '../../Global Styles/GlobalStyle.css';
 
-import { getGameDetails, getGameScreenshots, getGameTrailers } from '../../api/index';
+import { getGameDetails, getGameScreenshots, getGameTrailers, getGameStores } from '../../api/index';
 import { GameContext } from '../../Contexts/GameContext';
 
 export const Game = () => {
@@ -17,28 +17,33 @@ export const Game = () => {
     const [trailers, setTrailers] = useState([]);
     const [isMuted, setIsMuted] = useState(true);
     const [showMoreDescription, setShowMoreDescription] = useState(false);
+    const [gameStores, setGameStores] = useState([]);
+    const [foundIdMatch, setFoundIdMatch] = useState(false)
 
-    const descriptionLength = 200;
-
-    const { selectedGame } = useContext(GameContext);
+    const DESCRIPTION_LENGTH = 200;
 
     useEffect(() => {
         {/*api call to get data using ID from context then set local state for game details. selectedGame does not provide the same information as the getGameDetails api call*/}
         setIsLoading(true);
         setIsMuted(true);
         setShowMoreDescription(false);
-        const firstRequest = Promise.resolve(getGameDetails(parseInt(selectedGame.id)).then((game) => setGameDetails(game.data)));
-        const secondRequest = Promise.resolve(getGameScreenshots(selectedGame.slug).then((screenshot) => setScreenshots(screenshot.data.results)));
-        const thirdRequest = Promise.resolve(getGameTrailers(selectedGame.id).then((trailer) => setTrailers(trailer.data.results)));
-        Promise.all([firstRequest, secondRequest, thirdRequest]).then(() => setIsLoading(false));
+        setGameInformation();
     }, [])
 
     useEffect(() => {
         setMainScreenshot(screenshots[0]);
     }, [isLoading])
+
+    const setGameInformation = () => {
+        const parsedGame = JSON.parse(localStorage.getItem('game'));
+        const firstRequest = Promise.resolve(getGameDetails(parseInt(parsedGame.id)).then((game) => setGameDetails(game.data)));
+        const secondRequest = Promise.resolve(getGameScreenshots(parsedGame.slug).then((screenshot) => setScreenshots(screenshot.data.results)));
+        const thirdRequest = Promise.resolve(getGameTrailers(parsedGame.id).then((trailer) => setTrailers(trailer.data.results)));
+        const fourthRequest = Promise.resolve(getGameStores(parsedGame.slug).then((store) => setGameStores(store.data.results)));
+        Promise.all([firstRequest, secondRequest, thirdRequest, fourthRequest]).then(() => setIsLoading(false));
+    }
     
     const changeMainScreenshot = (e) => {
-        console.log(e)
         setMainScreenshot({ image: e.target.src });
     }
 
@@ -47,18 +52,21 @@ export const Game = () => {
         if(showMoreDescription) {
             return description;
         }
-        return description.substring(0, descriptionLength) + "...";
+        return description.substring(0, DESCRIPTION_LENGTH) + "...";
     }
 
     const showMoreOrLessClicked = () => {
         setShowMoreDescription(!showMoreDescription);
     }
 
+    const setFoundMatch = () => {
+        setFoundIdMatch(!foundIdMatch);
+    }
+
     return (
         <>
             {!isLoading ? (
                 <div className='game-container background'>
-                    {console.log(gameDetails)}
                     {trailers[0] == null ? 
                         <div className='no-video background'>
                             <span>No trailer found in API</span>
@@ -75,7 +83,24 @@ export const Game = () => {
                         {screenshots.map((screenshot, i) => (
                             <img key={i} onClick={changeMainScreenshot} className='small-image zoom' src={screenshot.image} alt={gameDetails.name} />
                         ))}
+                        <div className='stores-container drop-shadow'>
+                            <h3 className='store-title'>Stores</h3>
+                            {gameDetails.stores.map((store, i) => (
+                                <React.Fragment key={store.id}>
+                                    {gameStores.map((gameStore) => (
+                                        <React.Fragment key={gameStore.url}>
+                                            {gameStore.id === store.id ? (
+                                                <a className='store-anchor' target='_blank' href={gameStore.url}>
+                                                    <span key={i} className='store'>{store.store.name}</span>
+                                                </a>
+                                            ) : <></>}
+                                        </React.Fragment>
+                                    ))}
+                                </React.Fragment>
+                            ))}
+                        </div>
                     </div>
+                    
                     <div className='game-info drop-shadow'>
                         <h2 className='game-title'>{gameDetails.name}</h2>
                         <div className='break'></div>
@@ -118,7 +143,6 @@ export const Game = () => {
                         <div className='description-container'>
                             <div className='break' />
                             <div className='description' dangerouslySetInnerHTML={{ __html: showDescription()}} />
-                            {console.log(showMoreDescription)}
                             {showMoreDescription ? (
                                 <div className='show-less-container'>
                                     <span className='show-more-less' onClick={showMoreOrLessClicked}>Show Less</span>
@@ -129,8 +153,8 @@ export const Game = () => {
                                 </div>
                             )}
                         </div>
+                        <div className='break' />
                         <div className='platform-container'>
-                            <div className='break' />
                             <h3 className='platform-title'>Platforms</h3>
                             {gameDetails.platforms?.map((game, i) => (
                                 <span key={i} className='platform'>{game.platform.name}</span>

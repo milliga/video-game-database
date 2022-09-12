@@ -36,13 +36,13 @@ export const GameList = () => {
         } else if (page < 3) {
             setAboveThreePages(false);
         }
-        const requests = Promise.resolve(getGames(page, 50).then((item) => setGames(item.data.results)));
+        const requests = Promise.resolve(getGames(page, 50)?.then((item) => setGames(item.data.results)));
         Promise.all([requests]).then(() => setIsLoading(false));
     }, [page])
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            const requests = Promise.resolve(getGames(page, 50, searchText).then((item) => setGames(item.data.results)));
+            const requests = Promise.resolve(getGames(page, 50, searchText)?.then((item) => setGames(item.data.results)));
             Promise.all([requests]).then(() => setIsLoading(false));
         }, 500)
 
@@ -55,27 +55,14 @@ export const GameList = () => {
         console.log(games);
     }, [isLoading]) */
 
-    const handleShowMoreClick = (e) => {
-        setPage(parseInt(e.target.id) + parseInt(1));
-    }
-
     const handlePageChange = (e) => {
         setIsLoading(true);
         setPage(parseInt(e.target.id));
     }
 
-    const handleGenreTagChange = (e) => {
-        setGenresAndTags(console.log(e));
-    }
-
     const handleSearchChange = (e) => {
         setIsLoading(true);
         setSearchText(e.target.value);
-    }
-
-    const addDefaultIcon = (e) => {
-        console.log(e);
-        e.target.src = missingBackgroundIcon;
     }
     
     return (
@@ -111,12 +98,15 @@ export const GameList = () => {
                     <div className='grid-container background'>
                         {games.map((game) => (
                             <div key={game.id} className="game">
-                                {console.log(game)}
-                                <Link onClick={() => setSelectedGame(game)} to={`/game?id=${game.id}`}><img 
+                                <Link onClick={() => {
+                                    localStorage.setItem('game', JSON.stringify(game));
+                                    setSelectedGame(game);
+                                }} to={`/game?id=${game.id}`}>
+                                <img 
                                     className='zoom' 
                                     src={game.background_image || missingBackgroundIcon}
                                     alt={game.name}
-                                    />
+                                />
                                 </Link>
                                 <div className='info'>
                                     {/*force string to not show past 45 characters to consistently keep style of each game card showing in game list component*/}

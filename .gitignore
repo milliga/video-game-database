@@ -12,6 +12,7 @@
 /build
 
 # misc
+.VSCodeCounter
 .DS_Store
 .env
 .env.local
@@ -25,3 +26,4 @@ yarn-error.log*
 
 reportWebVitals.js
 setupTests.js
+

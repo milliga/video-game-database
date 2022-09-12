@@ -98,3 +98,12 @@ export const getGameTrailers = async (id) => {
         console.log(error);
     }
 };
+
+export const getGameStores = async (gamePk) => {
+    try {
+        const data = await axios.get(`https://api.rawg.io/api/games/${gamePk}/stores?key=${process.env.REACT_APP_RAWG_KEY}`)
+        return data;
+    } catch (error) {
+        console.log(error)
+    }
+}
