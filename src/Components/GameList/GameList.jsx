@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { getGames, getGenres, getGenreDetails, } from '../../api/index';
+import { getGames, getGenres, getGenreDetails, getGameGenres, getGameTags} from '../../api/index';
 import { GameContext } from '../../Contexts/GameContext';
 import { SearchContext } from '../../Contexts/SearchContext'
 
@@ -15,13 +15,18 @@ import './GameList.css';
 import '../../Global Styles/GlobalStyle.css';
 import { TextField } from '@mui/material';
 
+import { tagsAndGenres } from './FilterParams';
+
 
 export const GameList = () => {
 
     const [games, setGames] = useState([{}]);
-    const [genresAndTags, setGenresAndTags] = useState([]);
+    const [genres, setGenres] = useState([]);
+    const [tags, setTags] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [aboveThreePages, setAboveThreePages] = useState(false);
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [clickedFilter, setClickedFilter] = useState(false)
 
     const { setSelectedGame } = useContext(GameContext);
     const { searchText, setSearchText, page, setPage } = useContext(SearchContext);
@@ -36,20 +41,27 @@ export const GameList = () => {
         } else if (page < 3) {
             setAboveThreePages(false);
         }
-        const requests = Promise.resolve(getGames(page, 50)?.then((item) => setGames(item.data.results)));
-        Promise.all([requests]).then(() => setIsLoading(false));
+        const request = Promise.resolve(getGames(page, 40, searchText, genres, tags)?.then((item) => setGames(item.data.results)));
+        Promise.all([request]).then(() => setIsLoading(false));
     }, [page])
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            const requests = Promise.resolve(getGames(page, 50, searchText)?.then((item) => setGames(item.data.results)));
-            Promise.all([requests]).then(() => setIsLoading(false));
+            const request = Promise.resolve(getGames(page, 40, searchText, genres, tags).then((item) => setGames(item.data.results)));
+            Promise.all([request]).then(() => setIsLoading(false));
         }, 500)
 
         return () => { 
             clearTimeout(timer); 
         }
     }, [searchText])
+
+    useEffect(() => {
+        setIsLoading(true);
+        setPage(1);
+        const request = Promise.resolve(getGames(page, 40, searchText, genres, tags).then((item) => setGames(item.data.results)))
+        Promise.all([request, ]).then(() => setIsLoading(false))
+    }, [clickedFilter])
 
   /*   useEffect(() => {
         console.log(games);
@@ -63,6 +75,27 @@ export const GameList = () => {
     const handleSearchChange = (e) => {
         setIsLoading(true);
         setSearchText(e.target.value);
+    }
+
+    const handleFilterClick = () => {
+        setIsFilterOpen(!isFilterOpen);
+    }
+
+    const handleFilterSubmit = () => {
+        setClickedFilter(!clickedFilter);
+    }
+
+    const handleAddTag = (e) => {
+        {/*TODO
+            Add values to a string instead of object as API accepts genres and tags as strings instead of objects.*/
+        }
+        if(!tags.includes(e.target.value)) {
+            setTags([...tags, e.target.value]);
+        }
+        else {
+            setTags(tags.filter((t) => t !== e.target.value));
+        }
+        console.log(tags);
     }
     
     return (
@@ -78,6 +111,28 @@ export const GameList = () => {
                         fullWidth
                     />
                 </div>
+            </div>
+            <div className='filter-container background'>
+                <div className='filter-button'>
+                    <Button variant='primary' onClick={handleFilterClick}>Filter</Button>
+                </div>
+                {isFilterOpen ? (
+                    <div className='filter-box'>
+                        <form action=''>
+                            <fieldset className='filter-field'>
+                                {tagsAndGenres.allTags.map((t) => (
+                                    <div className='filter'>
+                                        <input type='checkbox' id={t.name} name={t.name} value={t.name} onChange={handleAddTag}/>
+                                        <label style={{ paddingLeft: '5px'}}>{t.name}</label>
+                                    </div>
+                                ))}
+                            </fieldset>
+                        </form>
+                        <div className='submit-button'>
+                            <Button variant='success' onClick={handleFilterSubmit}>Submit Filter</Button>
+                        </div>
+                    </div>
+                ) : <></>}
             </div>
             
             {!isLoading ? (

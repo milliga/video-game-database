@@ -117,10 +117,6 @@ export const Game = () => {
                                 <span key={i} className='developer'>{dev.name}</span>
                             ))}
                         </div>
-                        {/* 
-                            TO DO
-                            show and link to store(s)
-                        */}
                         <div className='break' />
                         <div className='publisher-container'>
                             <h3 className='publisher-rating-title'>Publishers</h3>

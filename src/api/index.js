@@ -1,7 +1,7 @@
 import { Rating } from "@mui/material";
 import axios from "axios";
 
-export const getGames = async (pageNumber, pageSize, searchText) => {
+export const getGames = async (pageNumber, pageSize, searchText, genres, tags) => {
     try {
         const data = await axios.get(`https://rawg-video-games-database.p.rapidapi.com/games?key=${process.env.REACT_APP_RAWG_KEY}`, {
             params: {
@@ -9,6 +9,8 @@ export const getGames = async (pageNumber, pageSize, searchText) => {
                 page_size: pageSize,
                 search_exact: true,
                 search: searchText,
+                genres: genres,
+                tags: tags,
             },
             headers: {
                 'X-RapidAPI-Key': process.env.REACT_APP_RAPIDAPI_KEY,
@@ -106,4 +108,22 @@ export const getGameStores = async (gamePk) => {
     } catch (error) {
         console.log(error)
     }
-}
+};
+
+export const getGameGenres = async () => {
+    try {
+        const data = await axios.get(`https://api.rawg.io/api/genres?key=${process.env.REACT_APP_RAWG_KEY}`)
+        return data;
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+export const getGameTags = async () => {
+    try {
+        const data = await axios.get(`https://api.rawg.io/api/tags?key=${process.env.REACT_APP_RAWG_KEY}`)
+        return data;
+    } catch (error) {
+        console.log(error)
+    }
+};

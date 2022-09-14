@@ -3,7 +3,7 @@
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     column-gap: 6px;
     row-gap: 46px;
-    padding: 60px 60px;
+    padding: 20px 60px 60px 60px;
     margin: auto;
     max-width: 100%;
 }
@@ -60,7 +60,50 @@
     width: 50%;
 }
 
-.bottom {
+.filter-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 10px 50px 10px 50px;
     width: 100%;
-    height: 100vh;
+}
+
+.filter-button {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+.filter-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 70%;
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: 4px 4px 10px hsl(0deg 0% 0% / 0.7);
+}
+
+.filter {
+    display: inline-block;
+    padding: 0px 5px 0px 15px;
+}
+
+.filter-field {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.filter-field:last-child {
+    width: 100%;
+}
+
+.submit-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 0px 5px 0px;
+    width: 100%;
 }
