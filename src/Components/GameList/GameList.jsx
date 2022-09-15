@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import missingBackgroundIcon from '../../images/gaming-gamepad-icon.png'
+import arrowDownIcon from '../../images/arrow-down-icon.png'
 
 import './GameList.css';
 import '../../Global Styles/GlobalStyle.css';
@@ -41,13 +42,13 @@ export const GameList = () => {
         } else if (page < 3) {
             setAboveThreePages(false);
         }
-        const request = Promise.resolve(getGames(page, 40, searchText, genres, tags)?.then((item) => setGames(item.data.results)));
+        const request = Promise.resolve(getGames(page, 40, searchText, String(genres.toString()), String(tags.toString())).then((item) => setGames(item.data.results)));
         Promise.all([request]).then(() => setIsLoading(false));
     }, [page])
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            const request = Promise.resolve(getGames(page, 40, searchText, genres, tags).then((item) => setGames(item.data.results)));
+            const request = Promise.resolve(getGames(page, 40, searchText, String(genres.toString()), String(tags.toString())).then((item) => setGames(item.data.results)));
             Promise.all([request]).then(() => setIsLoading(false));
         }, 500)
 
@@ -59,8 +60,8 @@ export const GameList = () => {
     useEffect(() => {
         setIsLoading(true);
         setPage(1);
-        const request = Promise.resolve(getGames(page, 40, searchText, genres, tags).then((item) => setGames(item.data.results)))
-        Promise.all([request, ]).then(() => setIsLoading(false))
+        const request = Promise.resolve(getGames(page, 40, searchText, String(genres.toString()), String(tags.toString())).then((item) => setGames(item.data.results)))
+        Promise.all([request]).then(() => setIsLoading(false))
     }, [clickedFilter])
 
   /*   useEffect(() => {
@@ -86,70 +87,85 @@ export const GameList = () => {
     }
 
     const handleAddTag = (e) => {
-        {/*TODO
-            Add values to a string instead of object as API accepts genres and tags as strings instead of objects.*/
-        }
         if(!tags.includes(e.target.value)) {
+            e.target.checked = true;
             setTags([...tags, e.target.value]);
         }
-        else {
+        else if (tags.includes(e.target.value)) {
             setTags(tags.filter((t) => t !== e.target.value));
         }
-        console.log(tags);
+    }
+
+    const handleAddGenre = (e) => {
+        if(!genres.includes(e.target.value)) {
+            e.target.checked = true;
+            setGenres([...genres, e.target.value]);
+        }
+        else if (genres.includes(e.target.value)) {
+            setGenres(genres.filter((g) => g !== e.target.value));
+        }
+    }
+
+    const checkIfTagExists = (e) => {
+        if(tags.includes(e.target.value)) {
+            return true;
+        }
+    }
+
+    const checkIfGenreExists = (e) => {
+        if(genres.includes(e.target.value)) {
+            return true;
+        }
     }
     
     return (
         <>
-            <div className='search-container background'>
-                <div className='search'>
-                    <TextField
-                        value={searchText}
-                        id='outlined-basic'
-                        onChange={handleSearchChange}
-                        label='Search'
-                        variant='outlined'
-                        fullWidth
-                    />
-                </div>
-            </div>
-            <div className='filter-container background'>
-                <div className='filter-button'>
-                    <Button variant='primary' onClick={handleFilterClick}>Filter</Button>
-                </div>
-                {isFilterOpen ? (
-                    <div className='filter-box'>
-                        <form action=''>
-                            <fieldset className='filter-field'>
-                                {tagsAndGenres.allTags.map((t) => (
-                                    <div className='filter'>
-                                        <input type='checkbox' id={t.name} name={t.name} value={t.name} onChange={handleAddTag}/>
-                                        <label style={{ paddingLeft: '5px'}}>{t.name}</label>
-                                    </div>
-                                ))}
-                            </fieldset>
-                        </form>
-                        <div className='submit-button'>
-                            <Button variant='success' onClick={handleFilterSubmit}>Submit Filter</Button>
-                        </div>
-                    </div>
-                ) : <></>}
-            </div>
+            
             
             {!isLoading ? (
                 <>
-                    {/*
-                    TODO: add genre/tag filtering
-                    <div>
-                        <label>
-                            <input 
-                                type='checkbox'
-                                checked={actionGenreChecked}
-                                onChange={handleGenreChange} 
+                    <div className='search-container background'>
+                        <div className='search'>
+                            <TextField
+                                value={searchText}
+                                id='outlined-basic'
+                                onChange={handleSearchChange}
+                                label='Search'
+                                variant='outlined'
+                                fullWidth
                             />
-                            Action
-                        </label>
+                        </div>
                     </div>
-                    */}
+                    <div className='filter-container background'>
+                        <div className='filter-button'>
+                            <Button variant='primary' onClick={handleFilterClick}>Filter<img className={isFilterOpen ? 'filter-arrow-up' : 'filter-arrow'} src={arrowDownIcon} /></Button>
+                        </div>
+                        {isFilterOpen ? (
+                            <div className='filter-box'>
+                                <form action='' autoComplete='off'>
+                                    <fieldset className='filter-field'>
+                                        {/*Fix checkbox not staying checked on page change and refresh*/}
+                                        {tagsAndGenres.allTags.map((t) => (
+                                            <div className='filter'>
+                                                <input type='checkbox' id={t.name} name={t.name} value={t.slug} onChange={handleAddTag} />
+                                                <label style={{ paddingLeft: '5px' }}>{t.name}</label>
+                                            </div>
+                                        ))}
+                                        {tagsAndGenres.allGenres.map((g) => (
+                                            <div className='filter'>
+                                                <input type='checkbox' id={g.name} name={g.name} value={g.slug} onChange={handleAddGenre} />
+                                                <label style={{ paddingLeft: '5px' }}>{g.name}</label>
+                                            </div>
+                                        ))}
+                                    </fieldset>
+                                </form>
+                                <div className='submit-button'>
+                                    <Button variant='success' onClick={handleFilterSubmit}>Submit Filter</Button>
+                                </div>
+                            </div>
+                        ) : <></>}
+                    </div>
+                    {/*Add sort by for ratings, released, metacritic, etc*/}
                     <div className='grid-container background'>
                         {games.map((game) => (
                             <div key={game.id} className="game">

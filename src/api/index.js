@@ -1,26 +1,67 @@
 import { Rating } from "@mui/material";
 import axios from "axios";
 
-export const getGames = async (pageNumber, pageSize, searchText, genres, tags) => {
-    try {
-        const data = await axios.get(`https://rawg-video-games-database.p.rapidapi.com/games?key=${process.env.REACT_APP_RAWG_KEY}`, {
-            params: {
-                page: pageNumber,
-                page_size: pageSize,
-                search_exact: true,
-                search: searchText,
-                genres: genres,
-                tags: tags,
-            },
-            headers: {
-                'X-RapidAPI-Key': process.env.REACT_APP_RAPIDAPI_KEY,
-                'X-RapidAPI-Host': 'rawg-video-games-database.p.rapidapi.com',
-            },
-        });
-        return data;
-    } catch (error) {
-        console.log(error);
+export const getGames = async (pageNumber, pageSize, searchText, gameGenres, gameTags) => {
+    if(gameGenres === "" && gameTags === "") {
+        try {
+            const data = await axios.get(`https://rawg-video-games-database.p.rapidapi.com/games?key=${process.env.REACT_APP_RAWG_KEY}`, {
+                params: {
+                    page: pageNumber,
+                    page_size: pageSize,
+                    search_exact: true,
+                    search: searchText,
+                },
+                headers: {
+                    'X-RapidAPI-Key': process.env.REACT_APP_RAPIDAPI_KEY,
+                    'X-RapidAPI-Host': 'rawg-video-games-database.p.rapidapi.com',
+                },
+            });
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
     }
+    else if (gameGenres === "" && gameTags !== "") {
+        try {
+            const data = await axios.get(`https://rawg-video-games-database.p.rapidapi.com/games?key=${process.env.REACT_APP_RAWG_KEY}`, {
+                params: {
+                    page: pageNumber,
+                    page_size: pageSize,
+                    search_exact: true,
+                    search: searchText,
+                    tags: gameTags,
+                },
+                headers: {
+                    'X-RapidAPI-Key': process.env.REACT_APP_RAPIDAPI_KEY,
+                    'X-RapidAPI-Host': 'rawg-video-games-database.p.rapidapi.com',
+                },
+            });
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    else if (gameGenres !== "" && gameTags === "") {
+        try {
+            const data = await axios.get(`https://rawg-video-games-database.p.rapidapi.com/games?key=${process.env.REACT_APP_RAWG_KEY}`, {
+                params: {
+                    page: pageNumber,
+                    page_size: pageSize,
+                    search_exact: true,
+                    search: searchText,
+                    genres: gameGenres,
+                },
+                headers: {
+                    'X-RapidAPI-Key': process.env.REACT_APP_RAPIDAPI_KEY,
+                    'X-RapidAPI-Host': 'rawg-video-games-database.p.rapidapi.com',
+                },
+            });
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
 };
 
 export const getGenres = async (pageNumber, pageSize) => {

@@ -107,3 +107,22 @@
     padding: 15px 0px 5px 0px;
     width: 100%;
 }
+
+.filter-arrow {
+    box-shadow: none;
+    width: 10px;
+    height: 10px;
+    margin: 0 0 3px 8px;
+}
+
+.filter-arrow-up {
+    box-shadow: none;
+    width: 10px;
+    height: 10px;
+    margin: 0 0 3px 8px;
+    -webkit-transform:rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}

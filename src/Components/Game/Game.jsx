@@ -83,6 +83,7 @@ export const Game = () => {
                         {screenshots.map((screenshot, i) => (
                             <img key={i} onClick={changeMainScreenshot} className='small-image zoom' src={screenshot.image} alt={gameDetails.name} />
                         ))}
+                        <div className='line-break' />
                         <div className='stores-container drop-shadow'>
                             <h3 className='store-title'>Stores</h3>
                             {gameDetails.stores.map((store, i) => (
