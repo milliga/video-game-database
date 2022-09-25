@@ -11,19 +11,21 @@ import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import missingBackgroundIcon from '../../images/gaming-gamepad-icon.png'
 import arrowDownIcon from '../../images/arrow-down-icon.png'
+import { Checkbox } from '../Checkbox/Checkbox';
 
 import './GameList.css';
 import '../../Global Styles/GlobalStyle.css';
 import { TextField } from '@mui/material';
 
 import { tagsAndGenres } from './FilterParams';
+import { FilterContext } from '../../Contexts/FilterContext';
 
 
 export const GameList = () => {
 
     const [games, setGames] = useState([{}]);
-    const [genres, setGenres] = useState([]);
-    const [tags, setTags] = useState([]);
+    // const [genres, setGenres] = useState([]);
+    // const [tags, setTags] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [aboveThreePages, setAboveThreePages] = useState(false);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -31,6 +33,7 @@ export const GameList = () => {
 
     const { setSelectedGame } = useContext(GameContext);
     const { searchText, setSearchText, page, setPage } = useContext(SearchContext);
+    const { tags, setTags, genres, setGenres } = useContext(FilterContext);
 
     useEffect(() => {
         {/*ensure api call is finished when page is loaded/changed so loading icon can show if api call is not finished, set search text to empty string and show loading section
@@ -42,13 +45,13 @@ export const GameList = () => {
         } else if (page < 3) {
             setAboveThreePages(false);
         }
-        const request = Promise.resolve(getGames(page, 40, searchText, String(genres.toString()), String(tags.toString())).then((item) => setGames(item.data.results)));
+        const request = Promise.resolve(getGames(page, 40, searchText, getGenresAsString(), getTagsAsString()).then((item) => setGames(item.data.results)));
         Promise.all([request]).then(() => setIsLoading(false));
     }, [page])
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            const request = Promise.resolve(getGames(page, 40, searchText, String(genres.toString()), String(tags.toString())).then((item) => setGames(item.data.results)));
+            const request = Promise.resolve(getGames(page, 40, searchText, getGenresAsString(), getTagsAsString()).then((item) => setGames(item.data.results)));
             Promise.all([request]).then(() => setIsLoading(false));
         }, 500)
 
@@ -60,13 +63,9 @@ export const GameList = () => {
     useEffect(() => {
         setIsLoading(true);
         setPage(1);
-        const request = Promise.resolve(getGames(page, 40, searchText, String(genres.toString()), String(tags.toString())).then((item) => setGames(item.data.results)))
+        const request = Promise.resolve(getGames(page, 40, searchText, getGenresAsString(), getTagsAsString()).then((item) => setGames(item.data.results)))
         Promise.all([request]).then(() => setIsLoading(false))
     }, [clickedFilter])
-
-  /*   useEffect(() => {
-        console.log(games);
-    }, [isLoading]) */
 
     const handlePageChange = (e) => {
         setIsLoading(true);
@@ -86,85 +85,62 @@ export const GameList = () => {
         setClickedFilter(!clickedFilter);
     }
 
-    const handleAddTag = (e) => {
-        if(!tags.includes(e.target.value)) {
-            e.target.checked = true;
-            setTags([...tags, e.target.value]);
-        }
-        else if (tags.includes(e.target.value)) {
-            setTags(tags.filter((t) => t !== e.target.value));
-        }
+    const getGenresAsString = () => {
+        const genresAsString = genres.map((game) => game.name);
+        return String(genresAsString.toString());
     }
 
-    const handleAddGenre = (e) => {
-        if(!genres.includes(e.target.value)) {
-            e.target.checked = true;
-            setGenres([...genres, e.target.value]);
-        }
-        else if (genres.includes(e.target.value)) {
-            setGenres(genres.filter((g) => g !== e.target.value));
-        }
+    const getTagsAsString = () => {
+        const tagsAsString = tags.map((tag) => tag.name);
+        return String(tagsAsString.toString());
     }
 
-    const checkIfTagExists = (e) => {
-        if(tags.includes(e.target.value)) {
-            return true;
-        }
-    }
 
-    const checkIfGenreExists = (e) => {
-        if(genres.includes(e.target.value)) {
-            return true;
-        }
-    }
-    
     return (
         <>
-            
-            
+            <div className='search-container background'>
+                <div className='search'>
+                    <TextField
+                        value={searchText}
+                        id='outlined-basic'
+                        onChange={handleSearchChange}
+                        label='Search'
+                        variant='outlined'
+                        fullWidth
+                    />
+                </div>
+            </div>
+            <div className='filter-container background'>
+                <div className='filter-button'>
+                    <Button variant='primary' onClick={handleFilterClick}>Filter<img className={isFilterOpen ? 'filter-arrow-up' : 'filter-arrow'} src={arrowDownIcon} /></Button>
+                </div>
+                {isFilterOpen ? (
+                    <div className='filter-box'>
+                        <form action='' autoComplete='off'>
+                            <fieldset className='filter-field'>
+                                {/*Fix checkbox not staying checked on page change and refresh*/}
+                                {tagsAndGenres.allTags.map((t) => (
+                                    <div key={t.slug} className='filter'>
+                                        {/* <input type='checkbox' id={t.id} name={t.name} value={t.slug} onChange={handleAddTag} /> */}
+                                        <Checkbox id={t.id} name={t.name} slug={t.slug} isTag={true} />
+                                    </div>
+                                ))}
+                                {tagsAndGenres.allGenres.map((g) => (
+                                    <div key={g.slug} className='filter'>
+                                        {/* <input type='checkbox' id={g.id} name={g.name} value={g.slug} onChange={handleAddGenre} /> */}
+                                        <Checkbox id={g.id} name={g.name} slug={g.slug} isTag={false} />
+                                    </div>
+                                ))}
+                            </fieldset>
+                        </form>
+                        <div className='submit-button'>
+                            <Button variant='success' onClick={handleFilterSubmit}>Submit Filter</Button>
+                        </div>
+                    </div>
+                ) : <></>}
+            </div>
             {!isLoading ? (
                 <>
-                    <div className='search-container background'>
-                        <div className='search'>
-                            <TextField
-                                value={searchText}
-                                id='outlined-basic'
-                                onChange={handleSearchChange}
-                                label='Search'
-                                variant='outlined'
-                                fullWidth
-                            />
-                        </div>
-                    </div>
-                    <div className='filter-container background'>
-                        <div className='filter-button'>
-                            <Button variant='primary' onClick={handleFilterClick}>Filter<img className={isFilterOpen ? 'filter-arrow-up' : 'filter-arrow'} src={arrowDownIcon} /></Button>
-                        </div>
-                        {isFilterOpen ? (
-                            <div className='filter-box'>
-                                <form action='' autoComplete='off'>
-                                    <fieldset className='filter-field'>
-                                        {/*Fix checkbox not staying checked on page change and refresh*/}
-                                        {tagsAndGenres.allTags.map((t) => (
-                                            <div className='filter'>
-                                                <input type='checkbox' id={t.name} name={t.name} value={t.slug} onChange={handleAddTag} />
-                                                <label style={{ paddingLeft: '5px' }}>{t.name}</label>
-                                            </div>
-                                        ))}
-                                        {tagsAndGenres.allGenres.map((g) => (
-                                            <div className='filter'>
-                                                <input type='checkbox' id={g.name} name={g.name} value={g.slug} onChange={handleAddGenre} />
-                                                <label style={{ paddingLeft: '5px' }}>{g.name}</label>
-                                            </div>
-                                        ))}
-                                    </fieldset>
-                                </form>
-                                <div className='submit-button'>
-                                    <Button variant='success' onClick={handleFilterSubmit}>Submit Filter</Button>
-                                </div>
-                            </div>
-                        ) : <></>}
-                    </div>
                     {/*Add sort by for ratings, released, metacritic, etc*/}
                     <div className='grid-container background'>
                         {games.map((game) => (

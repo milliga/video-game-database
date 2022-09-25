@@ -17,7 +17,8 @@ export const getGames = async (pageNumber, pageSize, searchText, gameGenres, gam
                 },
             });
             return data;
-        } catch (error) {
+        } 
+        catch (error) {
             console.log(error);
         }
     }
@@ -37,7 +38,8 @@ export const getGames = async (pageNumber, pageSize, searchText, gameGenres, gam
                 },
             });
             return data;
-        } catch (error) {
+        } 
+        catch (error) {
             console.log(error);
         }
     }
@@ -57,7 +59,8 @@ export const getGames = async (pageNumber, pageSize, searchText, gameGenres, gam
                 },
             });
             return data;
-        } catch (error) {
+        } 
+        catch (error) {
             console.log(error);
         }
     }
@@ -77,7 +80,8 @@ export const getGenres = async (pageNumber, pageSize) => {
             },
         });
         return data;
-    } catch (error) {
+    } 
+    catch (error) {
         console.log(error);
     }
 };
@@ -94,7 +98,8 @@ export const getGenreDetails = async (id) => {
             },
         });
         return data;
-    } catch (error) {
+    } 
+    catch (error) {
         console.log(error);
     }
 };
@@ -111,7 +116,8 @@ export const getGameDetails = async (id) => {
             },
         });
         return data;
-    } catch (error) {
+    } 
+    catch (error) {
         console.log(error);
     }
 };
@@ -128,7 +134,8 @@ export const getGameScreenshots = async (gamePk) => {
             },
         });
         return data;
-    } catch (error) {
+    } 
+    catch (error) {
         console.log(error);
     }
 };
@@ -137,7 +144,8 @@ export const getGameTrailers = async (id) => {
     try {
         const data = await axios.get(`https://api.rawg.io/api/games/${id}/movies?key=${process.env.REACT_APP_RAWG_KEY}`)
         return data;
-    } catch (error) {
+    } 
+    catch (error) {
         console.log(error);
     }
 };
@@ -146,7 +154,8 @@ export const getGameStores = async (gamePk) => {
     try {
         const data = await axios.get(`https://api.rawg.io/api/games/${gamePk}/stores?key=${process.env.REACT_APP_RAWG_KEY}`)
         return data;
-    } catch (error) {
+    } 
+    catch (error) {
         console.log(error)
     }
 };
@@ -155,7 +164,8 @@ export const getGameGenres = async () => {
     try {
         const data = await axios.get(`https://api.rawg.io/api/genres?key=${process.env.REACT_APP_RAWG_KEY}`)
         return data;
-    } catch (error) {
+    } 
+    catch (error) {
         console.log(error)
     }
 };
@@ -164,7 +174,8 @@ export const getGameTags = async () => {
     try {
         const data = await axios.get(`https://api.rawg.io/api/tags?key=${process.env.REACT_APP_RAWG_KEY}`)
         return data;
-    } catch (error) {
+    } 
+    catch (error) {
         console.log(error)
     }
 };
