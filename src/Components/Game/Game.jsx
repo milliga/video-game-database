@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 
-import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import { faCircleNotch, faTrailer } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import './Game.css';
@@ -15,6 +15,7 @@ export const Game = () => {
     const [mainScreenshot, setMainScreenshot] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [trailers, setTrailers] = useState([]);
+    const [currentTrailer, setCurrentTrailer] = useState("");
     const [isMuted, setIsMuted] = useState(true);
     const [showMoreDescription, setShowMoreDescription] = useState(false);
     const [gameStores, setGameStores] = useState([]);
@@ -36,10 +37,10 @@ export const Game = () => {
 
     const setGameInformation = () => {
         const parsedGame = JSON.parse(localStorage.getItem('game'));
-        const firstRequest = Promise.resolve(getGameDetails(parseInt(parsedGame.id)).then((game) => setGameDetails(game.data)));
-        const secondRequest = Promise.resolve(getGameScreenshots(parsedGame.slug).then((screenshot) => setScreenshots(screenshot.data.results)));
-        const thirdRequest = Promise.resolve(getGameTrailers(parsedGame.id).then((trailer) => setTrailers(trailer.data.results)));
-        const fourthRequest = Promise.resolve(getGameStores(parsedGame.slug).then((store) => setGameStores(store.data.results)));
+        const firstRequest = Promise.resolve(getGameDetails(parseInt(parsedGame.id)).then((game) => setGameDetails(game.data))).catch(() => {return;});
+        const secondRequest = Promise.resolve(getGameScreenshots(parsedGame.slug).then((screenshot) => setScreenshots(screenshot.data.results))).catch(() => {return;});
+        const thirdRequest = Promise.resolve(getGameTrailers(parsedGame.id).then((trailer) => setTrailers(trailer.data.results))).catch(() => {return;});
+        const fourthRequest = Promise.resolve(getGameStores(parsedGame.slug).then((store) => setGameStores(store.data.results))).catch(() => {return;});
         Promise.all([firstRequest, secondRequest, thirdRequest, fourthRequest]).then(() => setIsLoading(false));
     }
     
@@ -57,10 +58,6 @@ export const Game = () => {
 
     const showMoreOrLessClicked = () => {
         setShowMoreDescription(!showMoreDescription);
-    }
-
-    const setFoundMatch = () => {
-        setFoundIdMatch(!foundIdMatch);
     }
 
     return (

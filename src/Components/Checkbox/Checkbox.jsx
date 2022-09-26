@@ -56,7 +56,6 @@ export const Checkbox = ({ id, name, slug, isTag }) => {
             }
             else if (genreStrings.includes(e.target.value)) {
                 setGenres(genres.filter((g) => g.name !== e.target.value));
-                genresCopy = genres.filter((g) => g.name !== e.target.value);
             }
         }
     }

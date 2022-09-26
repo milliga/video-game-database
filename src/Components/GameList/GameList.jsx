@@ -11,7 +11,10 @@ import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import missingBackgroundIcon from '../../images/gaming-gamepad-icon.png'
 import arrowDownIcon from '../../images/arrow-down-icon.png'
+import checkmarkIcon from '../../images/tick-icon.svg'
 import { Checkbox } from '../Checkbox/Checkbox';
+import CheckIcon from '@mui/icons-material/Check';
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
 
 import './GameList.css';
 import '../../Global Styles/GlobalStyle.css';
@@ -19,6 +22,7 @@ import { TextField } from '@mui/material';
 
 import { tagsAndGenres } from './FilterParams';
 import { FilterContext } from '../../Contexts/FilterContext';
+import { Dropdown } from 'react-bootstrap';
 
 
 export const GameList = () => {
@@ -30,14 +34,13 @@ export const GameList = () => {
     const [aboveThreePages, setAboveThreePages] = useState(false);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [clickedFilter, setClickedFilter] = useState(false)
-
+    const [ordering, setOrdering] = useState("");
     const { setSelectedGame } = useContext(GameContext);
     const { searchText, setSearchText, page, setPage } = useContext(SearchContext);
     const { tags, setTags, genres, setGenres } = useContext(FilterContext);
 
     useEffect(() => {
-        {/*ensure api call is finished when page is loaded/changed so loading icon can show if api call is not finished, set search text to empty string and show loading section
-            while api is called*/}
+        //Initiate all the proper state when the page has changed (or initially loaded when app if first started)
         setIsLoading(true);
         setSearchText("");
         if(page >= 3) { 
@@ -45,15 +48,16 @@ export const GameList = () => {
         } else if (page < 3) {
             setAboveThreePages(false);
         }
-        const request = Promise.resolve(getGames(page, 40, searchText, getGenresAsString(), getTagsAsString()).then((item) => setGames(item.data.results)));
+        const request = Promise.resolve(getGames(page, 40, searchText, getGenresAsString(), getTagsAsString(), String(ordering)).then((item) => setGames(item.data.results))).catch(() => {return;});
         Promise.all([request]).then(() => setIsLoading(false));
     }, [page])
 
     useEffect(() => {
+        //Timeout so API is not called every time a character is typed
         const timer = setTimeout(() => {
-            const request = Promise.resolve(getGames(page, 40, searchText, getGenresAsString(), getTagsAsString()).then((item) => setGames(item.data.results)));
+            const request = Promise.resolve(getGames(page, 40, searchText, getGenresAsString(), getTagsAsString(), String(ordering)).then((item) => setGames(item.data.results))).catch(() => {return;});
             Promise.all([request]).then(() => setIsLoading(false));
-        }, 500)
+        }, 1500)
 
         return () => { 
             clearTimeout(timer); 
@@ -61,14 +65,22 @@ export const GameList = () => {
     }, [searchText])
 
     useEffect(() => {
-        setIsLoading(true);
+        //Take user back to beginning of list of games when filter is updated so they don't stay on page X when they select a new filter
         setPage(1);
-        const request = Promise.resolve(getGames(page, 40, searchText, getGenresAsString(), getTagsAsString()).then((item) => setGames(item.data.results)))
+        const request = Promise.resolve(getGames(page, 40, searchText, getGenresAsString(), getTagsAsString(), String(ordering)).then((item) => setGames(item.data.results)).catch(() => {return;}));
         Promise.all([request]).then(() => setIsLoading(false))
     }, [clickedFilter])
 
+    useEffect(() => {
+        //Take user back to beginning of list of games when sort by has been changed so they don't stay on page X when they select a new way to sort
+        setPage(1);
+        const request = Promise.resolve(getGames(page, 40, searchText, getGenresAsString(), getTagsAsString(), String(ordering)).then((item) => setGames(item.data.results))).catch(() => {return;});
+        Promise.all([request]).then(() => setIsLoading(false));
+    }, [ordering])
+
     const handlePageChange = (e) => {
         setIsLoading(true);
+        console.log(e.target);
         setPage(parseInt(e.target.id));
     }
 
@@ -82,6 +94,7 @@ export const GameList = () => {
     }
 
     const handleFilterSubmit = () => {
+        setIsLoading(true);
         setClickedFilter(!clickedFilter);
     }
 
@@ -95,6 +108,34 @@ export const GameList = () => {
         return String(tagsAsString.toString());
     }
 
+    const handleSort = (e) => {
+        const sort = e.target.id;
+        if (sort === 'rating-up') {
+            setOrdering("-rating");
+        }
+        else if (sort === 'rating-down') {
+            setOrdering("rating");
+        }
+        else if (sort === 'released-up') {
+            setOrdering("-released");
+        }
+        else if (sort === 'released-down') {
+            setOrdering("released");
+        }
+        else if (sort === 'name-up') {
+            setOrdering("-name");
+        }
+        else if (sort === 'name-down') {
+            setOrdering("name");
+        }
+        else if (sort === 'metacritic-up') {
+            setOrdering("-metacritic");
+        }
+        else if (sort === 'metacritic-down') {
+            setOrdering("metacritic");
+        }
+        setIsLoading(true);
+    }
 
     return (
         <>
@@ -139,6 +180,23 @@ export const GameList = () => {
                     </div>
                 ) : <></>}
             </div>
+            <div className='sort-container background'>
+                <Dropdown>
+                    <Dropdown.Toggle variant='secondary' id='dropdown'>
+                        Sort By
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={handleSort} id='metacritic-up'>{ordering === '-metacritic' ? <CheckIcon /> : <></>}Metacritic (Descending)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='metacritic-down'>{ordering === 'metacritic' ? <CheckIcon /> : <></>}Metacritic (Ascending)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='name-up'>{ordering === '-name' ? <CheckIcon /> : <></>}Name (Descending)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='name-down'>{ordering === 'name' ? <CheckIcon /> : <></>}Name (Ascending)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='rating-up'>{ordering === '-rating' ? <CheckIcon /> : <></>} Rating (Descending)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='rating-down'>{ordering === 'rating' ? <CheckIcon /> : <></>}Rating (Ascending)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='released-up'>{ordering === '-released' ? <CheckIcon /> : <></>}Released (Descending)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='released-down'>{ordering === 'released' ? <CheckIcon /> : <></>}Released (Ascending)</Dropdown.Item>
+                    </Dropdown.Menu>  
+                </Dropdown>
+            </div>
             {!isLoading ? (
                 <>
                     {/*Add sort by for ratings, released, metacritic, etc*/}
@@ -148,7 +206,7 @@ export const GameList = () => {
                                 <Link onClick={() => {
                                     localStorage.setItem('game', JSON.stringify(game));
                                     setSelectedGame(game);
-                                }} to={`/game?id=${game.id}`}>
+                                }} to={`/game/`}>
                                 <img 
                                     className='zoom' 
                                     src={game.background_image || missingBackgroundIcon}
@@ -180,6 +238,7 @@ export const GameList = () => {
                             </>
                             ) : (
                                 <>
+                                    <Button id={1} onClick={handlePageChange} variant="dark" size='sm'><KeyboardDoubleArrowLeftIcon className='first-page-button' /></Button>
                                     <Button id={parseInt(page)} onClick={handlePageChange} variant="dark">{parseInt(page) - 2}</Button>
                                     <Button id={parseInt(page) + 1} onClick={handlePageChange} variant="dark">{parseInt(page) - 1}</Button>
                                     <Button id={parseInt(page) + 2} onClick={handlePageChange} variant="dark">{parseInt(page)}</Button>

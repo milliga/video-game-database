@@ -126,3 +126,16 @@
     -o-transform: rotate(180deg);
     transform: rotate(180deg);
 }
+
+.sort-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    padding-right: 66px;
+}
+
+.first-page-button {
+    font-size: 28px !important;
+    pointer-events: none !important;
+}
