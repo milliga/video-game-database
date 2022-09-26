@@ -80,7 +80,6 @@ export const GameList = () => {
 
     const handlePageChange = (e) => {
         setIsLoading(true);
-        console.log(e.target);
         setPage(parseInt(e.target.id));
     }
 
