@@ -109,6 +109,7 @@ export const GameList = () => {
     }
 
     const handleSort = (e) => {
+        //Add ordering string to state for API call according to what the user selects
         const sort = e.target.id;
         if (sort === 'rating-up') {
             setOrdering("-rating");

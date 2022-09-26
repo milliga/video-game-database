@@ -24,7 +24,7 @@ export const Game = () => {
     const DESCRIPTION_LENGTH = 200;
 
     useEffect(() => {
-        {/*api call to get data using ID from context then set local state for game details. selectedGame does not provide the same information as the getGameDetails api call*/}
+        //api call to get data using ID from context then set local state for game details. selectedGame does not provide the same information as the getGameDetails api call
         setIsLoading(true);
         setIsMuted(true);
         setShowMoreDescription(false);
@@ -49,6 +49,7 @@ export const Game = () => {
     }
 
     const showDescription = () => {
+        //Trim description so it doesn't take up so much space unless the user clicks show more
         const description = gameDetails.description;
         if(showMoreDescription) {
             return description;
