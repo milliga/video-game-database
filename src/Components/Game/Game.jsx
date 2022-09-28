@@ -38,7 +38,6 @@ export const Game = () => {
 
     const setGameInformation = () => {
         const parsedGame = JSON.parse(localStorage.getItem('game'));
-        console.log(parsedGame);
         setReleasedDate(parsedGame.released);
         const firstRequest = Promise.resolve(getGameDetails(parseInt(parsedGame.id)).then((game) => setGameDetails(game.data))).catch(() => {return;});
         const secondRequest = Promise.resolve(getGameScreenshots(parsedGame.slug).then((screenshot) => setScreenshots(screenshot.data.results))).catch(() => {return;});
@@ -93,7 +92,7 @@ export const Game = () => {
                                         <React.Fragment key={gameStore.url}>
                                             {gameStore.id === store.id ? (
                                                 <a className='store-anchor' target='_blank' href={gameStore.url}>
-                                                    <span key={i} className='store'>{store.store.name}</span>
+                                                    <span key={i} className='store text-background'>{store.store.name}</span>
                                                 </a>
                                             ) : <></>}
                                         </React.Fragment>
@@ -105,38 +104,38 @@ export const Game = () => {
                     
                     <div className='game-info drop-shadow'>
                         <h2 className='game-title'>{gameDetails.name}</h2>
-                        <span className='released-date '>Released {releasedDate}</span>
+                        <span className='released-date text-background'>Released {releasedDate}</span>
                         <div className='break'></div>
                         {/*show information from game clicked*/}
                         <div className='genre-container'>
                             <h3 className='genre-developer-title'>Genres</h3>
                             {gameDetails.genres?.map((genre, i) => (
-                                <span key={i} className='genre'>{genre.name}</span>
+                                <span key={i} className='genre text-background'>{genre.name}</span>
                             ))}
                         </div>
                         <div className='developer-container'>
                             <h3 className='genre-developer-title'>Developers</h3>
                             {gameDetails.developers?.map((dev, i) => (
-                                <span key={i} className='developer'>{dev.name}</span>
+                                <span key={i} className='developer text-background'>{dev.name}</span>
                             ))}
                         </div>
                         <div className='break' />
                         <div className='publisher-container'>
                             <h3 className='publisher-rating-title'>Publishers</h3>
                             {gameDetails.publishers?.map((publisher, i) => (
-                                <span key={i} className='publisher'>{publisher.name}</span>
+                                <span key={i} className='publisher text-background'>{publisher.name}</span>
                             ))}
                         </div>
                         <div className='game-rating-container'>
                             <h3 className='publisher-rating-title'>Ratings</h3>
-                            <span className='game-rating'>User Rating: {gameDetails.rating}/5</span>
-                            <span className='game-rating'>Metacritic Rating: {gameDetails.metacritic}/100</span>
+                            <span className='game-rating text-background'>User Rating: {gameDetails.rating}/5</span>
+                            <span className='game-rating text-background'>Metacritic Rating: {gameDetails.metacritic}/100</span>
                         </div>
                         <div className='break' />
                         <div className='tag-container'>
                             <h3 className='tag-title'>Tags</h3>
                             {gameDetails.tags?.map((tag, i) => (
-                                <span key={i} className='tag'>{tag.name}</span>
+                                <span key={i} className='tag text-background'>{tag.name}</span>
                             ))}
                         </div>
                         <div className='description-container'>
@@ -156,7 +155,7 @@ export const Game = () => {
                         <div className='platform-container'>
                             <h3 className='platform-title'>Platforms</h3>
                             {gameDetails.platforms?.map((game, i) => (
-                                <span key={i} className='platform'>{game.platform.name}</span>
+                                <span key={i} className='platform text-background'>{game.platform.name}</span>
                             ))}
                         </div>
                     </div>

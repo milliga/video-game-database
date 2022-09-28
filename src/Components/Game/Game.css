@@ -74,8 +74,6 @@
 
 .genre {
     display: flex;
-    background-color: hsl(0deg 0% 0% / 0.2);
-    border-radius: 5px;
     padding: 4px 5px 8px 5px;
     margin: 5px 10px 15px 0px;
 }
@@ -96,8 +94,6 @@
 
 .developer {
     display: flex;
-    background-color: hsl(0deg 0% 0% / 0.2);
-    border-radius: 5px;
     padding: 4px 5px 8px 5px;
     margin: 5px 10px 15px 0px;
 }
@@ -152,8 +148,6 @@
 
 .tag {
     display: flex;
-    background-color: hsl(0deg 0% 0% / 0.2);
-    border-radius: 5px;
     padding: 4px 5px 8px 5px;
     margin: 5px 10px 15px 0px;
 }
@@ -174,8 +168,6 @@
 
 .publisher {
     display: flex;
-    background-color: hsl(0deg 0% 0% / 0.2);
-    border-radius: 5px;
     padding: 4px 5px 8px 5px;
     margin: 5px 10px 15px 0px;
 }
@@ -201,8 +193,6 @@
     flex-wrap: wrap;
     font-size: large;
     width: auto;
-    background-color: hsl(0deg 0% 0% / 0.2);
-    border-radius: 5px;
     padding: 4px 5px 8px 5px;
     margin: 8px 8px 8px 0px;
 }
@@ -285,8 +275,6 @@
 
 .platform {
     display: flex;
-    background-color: hsl(0deg 0% 0% / 0.2);
-    border-radius: 5px;
     padding: 4px 5px 8px 5px;
     margin: 5px 10px 15px 0px;
 }
@@ -323,8 +311,6 @@
 
 .store {
     display: flex;
-    background-color: hsl(0deg 0% 0% / 0.2);
-    border-radius: 5px;
     padding: 4px 5px 8px 5px;
     margin: 5px 10px 15px 0px;
 }
@@ -346,7 +332,10 @@
 .released-date {
     margin: auto;
     width: fit-content;
+    padding: 5px;
+}
+
+.text-background {
     background-color: hsl(0deg 0% 0% / 0.2);
     border-radius: 5px;
-    padding: 5px;
 }

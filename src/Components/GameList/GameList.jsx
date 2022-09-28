@@ -197,8 +197,8 @@ export const GameList = () => {
                     <Dropdown.Menu>
                         <Dropdown.Item onClick={handleSort} id='metacritic-up'>{ordering === '-metacritic' ? <CheckIcon /> : <></>}Metacritic (High)</Dropdown.Item>
                         <Dropdown.Item onClick={handleSort} id='metacritic-down'>{ordering === 'metacritic' ? <CheckIcon /> : <></>}Metacritic (Low)</Dropdown.Item>
-                        <Dropdown.Item onClick={handleSort} id='name-up'>{ordering === '-name' ? <CheckIcon /> : <></>}Name (Z-A)</Dropdown.Item>
                         <Dropdown.Item onClick={handleSort} id='name-down'>{ordering === 'name' ? <CheckIcon /> : <></>}Name (A-Z)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='name-up'>{ordering === '-name' ? <CheckIcon /> : <></>}Name (Z-A)</Dropdown.Item>
                         <Dropdown.Item onClick={handleSort} id='rating-up'>{ordering === '-rating' ? <CheckIcon /> : <></>} Rating (High)</Dropdown.Item>
                         <Dropdown.Item onClick={handleSort} id='rating-down'>{ordering === 'rating' ? <CheckIcon /> : <></>}Rating (Low)</Dropdown.Item>
                         <Dropdown.Item onClick={handleSort} id='released-up'>{ordering === '-released' ? <CheckIcon /> : <></>}Released (New)</Dropdown.Item>
@@ -214,7 +214,6 @@ export const GameList = () => {
                     <div className='grid-container background'>
                         {games.map((game) => (
                             <div key={game.id} className="game">
-                                {console.log(game)}
                                 <Link onClick={() => {
                                     localStorage.setItem('game', JSON.stringify(game));
                                     setSelectedGame(game);
