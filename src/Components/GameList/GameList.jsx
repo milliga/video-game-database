@@ -195,16 +195,16 @@ export const GameList = () => {
                         Sort By
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                        <Dropdown.Item onClick={handleSort} id='metacritic-up'>{ordering === '-metacritic' ? <CheckIcon /> : <></>}Metacritic (High)</Dropdown.Item>
-                        <Dropdown.Item onClick={handleSort} id='metacritic-down'>{ordering === 'metacritic' ? <CheckIcon /> : <></>}Metacritic (Low)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='created-up'>{ordering === 'created' ? <CheckIcon /> : <></>}Created By (A-Z)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='created-down'>{ordering === '-created' ? <CheckIcon /> : <></>}Created By (Z-A)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='metacritic-up'>{ordering === '-metacritic' ? <CheckIcon /> : <></>}Metacritic Rating(High)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='metacritic-down'>{ordering === 'metacritic' ? <CheckIcon /> : <></>}Metacritic Rating (Low)</Dropdown.Item>
                         <Dropdown.Item onClick={handleSort} id='name-down'>{ordering === 'name' ? <CheckIcon /> : <></>}Name (A-Z)</Dropdown.Item>
                         <Dropdown.Item onClick={handleSort} id='name-up'>{ordering === '-name' ? <CheckIcon /> : <></>}Name (Z-A)</Dropdown.Item>
-                        <Dropdown.Item onClick={handleSort} id='rating-up'>{ordering === '-rating' ? <CheckIcon /> : <></>} Rating (High)</Dropdown.Item>
-                        <Dropdown.Item onClick={handleSort} id='rating-down'>{ordering === 'rating' ? <CheckIcon /> : <></>}Rating (Low)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='rating-up'>{ordering === '-rating' ? <CheckIcon /> : <></>}User Rating (High)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='rating-down'>{ordering === 'rating' ? <CheckIcon /> : <></>}User Rating (Low)</Dropdown.Item>
                         <Dropdown.Item onClick={handleSort} id='released-up'>{ordering === '-released' ? <CheckIcon /> : <></>}Released (New)</Dropdown.Item>
                         <Dropdown.Item onClick={handleSort} id='released-down'>{ordering === 'released' ? <CheckIcon /> : <></>}Released (Old)</Dropdown.Item>
-                        <Dropdown.Item onClick={handleSort} id='created-up'>{ordering === '-created' ? <CheckIcon /> : <></>}Created (New)</Dropdown.Item>
-                        <Dropdown.Item onClick={handleSort} id='created-down'>{ordering === 'created' ? <CheckIcon /> : <></>}Created (Old)</Dropdown.Item>
                     </Dropdown.Menu>  
                 </Dropdown>
             </div>
