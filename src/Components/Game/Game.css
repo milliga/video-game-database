@@ -54,6 +54,7 @@
 
 .game-title {
     margin: auto;
+    width: 100%;
     padding: 20px 20px 10px 20px;
 }
 
@@ -340,4 +341,12 @@
 
 .line-break {
     width: 100%;
+}
+
+.released-date {
+    margin: auto;
+    width: fit-content;
+    background-color: hsl(0deg 0% 0% / 0.2);
+    border-radius: 5px;
+    padding: 5px;
 }

@@ -19,7 +19,8 @@ export const Game = () => {
     const [isMuted, setIsMuted] = useState(true);
     const [showMoreDescription, setShowMoreDescription] = useState(false);
     const [gameStores, setGameStores] = useState([]);
-    const [foundIdMatch, setFoundIdMatch] = useState(false)
+    const [foundIdMatch, setFoundIdMatch] = useState(false);
+    const [releasedDate, setReleasedDate] = useState("");
 
     const DESCRIPTION_LENGTH = 200;
 
@@ -37,6 +38,8 @@ export const Game = () => {
 
     const setGameInformation = () => {
         const parsedGame = JSON.parse(localStorage.getItem('game'));
+        console.log(parsedGame);
+        setReleasedDate(parsedGame.released);
         const firstRequest = Promise.resolve(getGameDetails(parseInt(parsedGame.id)).then((game) => setGameDetails(game.data))).catch(() => {return;});
         const secondRequest = Promise.resolve(getGameScreenshots(parsedGame.slug).then((screenshot) => setScreenshots(screenshot.data.results))).catch(() => {return;});
         const thirdRequest = Promise.resolve(getGameTrailers(parsedGame.id).then((trailer) => setTrailers(trailer.data.results))).catch(() => {return;});
@@ -102,6 +105,7 @@ export const Game = () => {
                     
                     <div className='game-info drop-shadow'>
                         <h2 className='game-title'>{gameDetails.name}</h2>
+                        <span className='released-date '>Released {releasedDate}</span>
                         <div className='break'></div>
                         {/*show information from game clicked*/}
                         <div className='genre-container'>

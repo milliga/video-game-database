@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 
 import { SearchContext } from '../../Contexts/SearchContext'
+import { FilterContext } from '../../Contexts/FilterContext';
+import { ListContext } from '../../Contexts/ListContext';
 
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 
@@ -10,10 +12,16 @@ import './Header.css';
 export const Header = () => {
 
     const { searchText, setSearchText, page, setPage } = useContext(SearchContext);
+    const { tags, setTags, genres, setGenres, setOrdering } = useContext(FilterContext);
+    const { isLoading, setIsLoading } = useContext(ListContext);
 
     const handleHomeClick = (e) => {
         setSearchText("");
         setPage(1);
+        setTags([]);
+        setGenres([]);
+        setOrdering("");
+        setIsLoading(true);
     }
 
     return (

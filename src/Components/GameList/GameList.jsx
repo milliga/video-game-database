@@ -22,6 +22,7 @@ import { TextField } from '@mui/material';
 
 import { tagsAndGenres } from './FilterParams';
 import { FilterContext } from '../../Contexts/FilterContext';
+import { ListContext } from '../../Contexts/ListContext';
 import { Dropdown } from 'react-bootstrap';
 
 
@@ -30,14 +31,16 @@ export const GameList = () => {
     const [games, setGames] = useState([{}]);
     // const [genres, setGenres] = useState([]);
     // const [tags, setTags] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    //const [isLoading, setIsLoading] = useState(true);
     const [aboveThreePages, setAboveThreePages] = useState(false);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [clickedFilter, setClickedFilter] = useState(false)
-    const [ordering, setOrdering] = useState("");
+    // const [ordering, setOrdering] = useState("");
+
     const { setSelectedGame } = useContext(GameContext);
     const { searchText, setSearchText, page, setPage } = useContext(SearchContext);
-    const { tags, setTags, genres, setGenres } = useContext(FilterContext);
+    const { tags, setTags, genres, setGenres, ordering, setOrdering } = useContext(FilterContext);
+    const { isLoading, setIsLoading } = useContext(ListContext);
 
     useEffect(() => {
         //Initiate all the proper state when the page has changed (or initially loaded when app if first started)
@@ -134,6 +137,12 @@ export const GameList = () => {
         else if (sort === 'metacritic-down') {
             setOrdering("metacritic");
         }
+        else if (sort === 'created-up') {
+            setOrdering("-created");
+        }
+        else if (sort === 'created-down') {
+            setOrdering("created");
+        }
         setIsLoading(true);
     }
 
@@ -188,12 +197,14 @@ export const GameList = () => {
                     <Dropdown.Menu>
                         <Dropdown.Item onClick={handleSort} id='metacritic-up'>{ordering === '-metacritic' ? <CheckIcon /> : <></>}Metacritic (High)</Dropdown.Item>
                         <Dropdown.Item onClick={handleSort} id='metacritic-down'>{ordering === 'metacritic' ? <CheckIcon /> : <></>}Metacritic (Low)</Dropdown.Item>
-                        <Dropdown.Item onClick={handleSort} id='name-up'>{ordering === '-name' ? <CheckIcon /> : <></>}Name (High)</Dropdown.Item>
-                        <Dropdown.Item onClick={handleSort} id='name-down'>{ordering === 'name' ? <CheckIcon /> : <></>}Name (Low)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='name-up'>{ordering === '-name' ? <CheckIcon /> : <></>}Name (Z-A)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='name-down'>{ordering === 'name' ? <CheckIcon /> : <></>}Name (A-Z)</Dropdown.Item>
                         <Dropdown.Item onClick={handleSort} id='rating-up'>{ordering === '-rating' ? <CheckIcon /> : <></>} Rating (High)</Dropdown.Item>
                         <Dropdown.Item onClick={handleSort} id='rating-down'>{ordering === 'rating' ? <CheckIcon /> : <></>}Rating (Low)</Dropdown.Item>
-                        <Dropdown.Item onClick={handleSort} id='released-up'>{ordering === '-released' ? <CheckIcon /> : <></>}Released (High)</Dropdown.Item>
-                        <Dropdown.Item onClick={handleSort} id='released-down'>{ordering === 'released' ? <CheckIcon /> : <></>}Released (Low)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='released-up'>{ordering === '-released' ? <CheckIcon /> : <></>}Released (New)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='released-down'>{ordering === 'released' ? <CheckIcon /> : <></>}Released (Old)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='created-up'>{ordering === '-created' ? <CheckIcon /> : <></>}Created (New)</Dropdown.Item>
+                        <Dropdown.Item onClick={handleSort} id='created-down'>{ordering === 'created' ? <CheckIcon /> : <></>}Created (Old)</Dropdown.Item>
                     </Dropdown.Menu>  
                 </Dropdown>
             </div>
@@ -203,6 +214,7 @@ export const GameList = () => {
                     <div className='grid-container background'>
                         {games.map((game) => (
                             <div key={game.id} className="game">
+                                {console.log(game)}
                                 <Link onClick={() => {
                                     localStorage.setItem('game', JSON.stringify(game));
                                     setSelectedGame(game);
