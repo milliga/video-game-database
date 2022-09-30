@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import { getGames, getGenres, getGenreDetails, getGameGenres, getGameTags} from '../../api/index';
+import { getGames } from '../../api/index';
 import { GameContext } from '../../Contexts/GameContext';
 import { SearchContext } from '../../Contexts/SearchContext'
 
@@ -11,7 +11,6 @@ import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import Button from 'react-bootstrap/Button';
 import missingBackgroundIcon from '../../images/gaming-gamepad-icon.png'
 import arrowDownIcon from '../../images/arrow-down-icon.png'
-import checkmarkIcon from '../../images/tick-icon.svg'
 import { Checkbox } from '../Checkbox/Checkbox';
 import CheckIcon from '@mui/icons-material/Check';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
@@ -31,19 +30,15 @@ import { MobileContext } from '../../Contexts/MobileContext';
 export const GameList = () => {
 
     const [games, setGames] = useState([{}]);
-    // const [genres, setGenres] = useState([]);
-    // const [tags, setTags] = useState([]);
-    //const [isLoading, setIsLoading] = useState(true);
     const [aboveThreePages, setAboveThreePages] = useState(false);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [clickedFilter, setClickedFilter] = useState(false);
-    // const [ordering, setOrdering] = useState("");
 
     const { setSelectedGame } = useContext(GameContext);
     const { searchText, setSearchText, page, setPage } = useContext(SearchContext);
-    const { tags, setTags, genres, setGenres, ordering, setOrdering } = useContext(FilterContext);
+    const { tags, genres, ordering, setOrdering } = useContext(FilterContext);
     const { isLoading, setIsLoading } = useContext(ListContext);
-    const { isMobile, setIsMobile } = useContext(MobileContext);
+    const { isMobile } = useContext(MobileContext);
 
     const GAME_PER_PAGE = 35;
 
@@ -171,7 +166,9 @@ export const GameList = () => {
             </div>
             <div className='filter-container background'>
                 <div className='filter-button'>
-                    <Button variant='primary' onClick={handleFilterClick}>Filter<img className={isFilterOpen ? 'filter-arrow-up' : 'filter-arrow'} src={arrowDownIcon} /></Button>
+                    <Button variant='primary' onClick={handleFilterClick}>
+                        Filter<img className={isFilterOpen ? 'filter-arrow-up' : 'filter-arrow'} src={arrowDownIcon} alt='filter arrow'/>
+                    </Button>
                 </div>
                 {isFilterOpen ? (
                     <div className='filter-box'>
@@ -262,7 +259,7 @@ export const GameList = () => {
                     </div>
                     {/*update page state to call next page in api call by calling handleShowMoreClick which increases page state by 1*/}
                     <div className='pages background'>
-                        {games.length >= games.length ? (<>
+                        {games.length >= 3 ? (<>
                             {!aboveThreePages ? (
                             <>
                                 <Button id={parseInt(page)} onClick={handlePageChange} variant="dark">1</Button>
