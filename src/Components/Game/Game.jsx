@@ -16,15 +16,12 @@ export const Game = () => {
     const [mainScreenshot, setMainScreenshot] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [trailers, setTrailers] = useState([]);
-    const [currentTrailer, setCurrentTrailer] = useState("");
     const [isMuted, setIsMuted] = useState(true);
     const [showMoreDescription, setShowMoreDescription] = useState(false);
     const [gameStores, setGameStores] = useState([]);
-    const [foundIdMatch, setFoundIdMatch] = useState(false);
     const [releasedDate, setReleasedDate] = useState("");
-    //const [isMobile, setIsMobile] = useState(false);
 
-    const { isMobile, setIsMobile } = useContext(MobileContext);
+    const { isMobile } = useContext(MobileContext);
 
     const DESCRIPTION_LENGTH = 200;
 
@@ -73,7 +70,7 @@ export const Game = () => {
                 <div className='game-container background'>
                     {trailers[0] == null ? 
                         <div className='no-video background'>
-                            <span>No trailer found in API</span>
+                            <span>No trailer available</span>
                         </div> : 
                         <div className='video-container'>
                             <video className='video' muted={isMuted} autoPlay={true} controls>
@@ -112,7 +109,10 @@ export const Game = () => {
                     
                     <div className='game-info drop-shadow'>
                         <h2 className='game-title'>{gameDetails.name}</h2>
-                        <span className='released-date text-background'>Released {releasedDate}</span>
+                        {releasedDate !== null ? (
+                            <span className='released-date text-background'>Released {releasedDate}</span>
+                            ) : (<></>)
+                        }
                         <div className='break'></div>
                         {/*show information from game clicked*/}
                         <div className='genre-container'>

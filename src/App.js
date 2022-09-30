@@ -1,7 +1,5 @@
-import { Component, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-import { getGames, } from './api/index';
 
 import { Header } from './Components/Header/Header';
 import { GameList } from './Components/GameList/GameList';

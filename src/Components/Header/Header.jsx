@@ -26,9 +26,13 @@ export const Header = () => {
 
     return (
         <div className='header'>
-            <SportsEsportsIcon className='game-icon' sx={{ color: 'white', fontSize: 70 }}/>
-            <Link onClick={handleHomeClick} className='anchor' to={`/`}><h1 className='title'>Video Game Database</h1></Link>
-            <Link onClick={handleHomeClick} className='anchor' to={`/`}><h2 className='home'>Home</h2></Link>
+            <div className='game-icon'>
+                <SportsEsportsIcon sx={{ color: 'white', fontSize: 70 }}/>
+            </div>
+            <div className='links'>
+                <Link onClick={handleHomeClick} className='anchor' to={`/`}><h1 className='title'>Video Game Database</h1></Link>
+                <Link onClick={handleHomeClick} className='anchor' to={`/`}><h2 className='home'>Home</h2></Link>
+            </div>
         </div>
     );
 };
