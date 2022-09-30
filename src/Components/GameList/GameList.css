@@ -28,6 +28,7 @@
     display: flex;
     justify-content: space-between;
     padding-top: 5px;
+    flex-wrap: wrap;
 }
 
 .star-icon {
@@ -43,7 +44,7 @@
     align-items: center;
     text-align: center;
     gap: 10px;
-    padding: 20px;
+    padding: 30px;
 }
 
 .filter {
@@ -138,4 +139,54 @@
 .first-page-button {
     font-size: 28px !important;
     pointer-events: none !important;
+}
+
+.scroll-up {
+    position: absolute;
+    right: 5%;
+}
+
+.scroll-up:hover {
+    cursor: pointer;
+}
+
+.name {
+    display: flex;
+    width: 70%;
+    text-align: left;
+}
+
+@media only screen and (max-width: 580px) {
+    .search {
+        padding: 15px 8px 8px 8px;
+        width: 80%;
+    }
+    .filter-box {
+        width: 95%;
+    }
+    .sort-container {
+        padding-top: 5px;
+    }
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(40%, 1fr));
+        padding: 20px 40px 60px 40px;
+        column-gap: 15px;
+    }
+    .game {
+        position: relative;
+        width: 400px;
+        height: 188px;
+        padding: 20px 8px;
+    }
+    .name {
+        display: flex;
+        width: 100%;
+    }
+    .rating-container {
+        margin-top: -15px;
+        margin-left: -5px;
+        padding-left: 0;
+    }
+    
 }

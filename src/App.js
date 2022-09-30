@@ -10,6 +10,7 @@ import { GameContext } from './Contexts/GameContext'
 import { SearchContext } from './Contexts/SearchContext'
 import { FilterContext } from './Contexts/FilterContext';
 import { ListContext } from './Contexts/ListContext';
+import { MobileContext } from './Contexts/MobileContext';
 
 const App = () => {
     const [selectedGame, setSelectedGame] = useState({});
@@ -19,6 +20,22 @@ const App = () => {
     const [tags, setTags] = useState([]);
     const [ordering, setOrdering] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+            //check if mobile to display certain parts of the page correctly
+            window.addEventListener('resize', changeIsMobile);
+    }, [])
+    
+
+    const changeIsMobile = () => {
+        if(window.innerWidth < 424) {
+            setIsMobile(true)
+        }
+        else {
+            setIsMobile(false);
+        }
+    }
 
     return (
         <>
@@ -26,13 +43,15 @@ const App = () => {
             <SearchContext.Provider value={{ searchText, setSearchText, page, setPage }}>
                 <FilterContext.Provider value={{ tags, setTags, genres, setGenres, ordering, setOrdering }}>
                     <ListContext.Provider value={{ isLoading, setIsLoading }}>
-                        <Router>
-                            <Header />
-                            <Routes>
-                                <Route path='/' element={<GameList />} />
-                                <Route path='/game/' element={<Game />}/>
-                            </Routes>
-                        </Router>
+                        <MobileContext.Provider value={{ isMobile, setIsMobile }} >
+                            <Router>
+                                <Header />
+                                <Routes>
+                                    <Route path='/' element={<GameList />} />
+                                    <Route path='/game/' element={<Game />}/>
+                                </Routes>
+                            </Router>
+                        </MobileContext.Provider>
                     </ListContext.Provider>
                 </FilterContext.Provider>
             </SearchContext.Provider>

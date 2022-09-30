@@ -15,6 +15,7 @@ import checkmarkIcon from '../../images/tick-icon.svg'
 import { Checkbox } from '../Checkbox/Checkbox';
 import CheckIcon from '@mui/icons-material/Check';
 import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 
 import './GameList.css';
 import '../../Global Styles/GlobalStyle.css';
@@ -24,6 +25,7 @@ import { tagsAndGenres } from './FilterParams';
 import { FilterContext } from '../../Contexts/FilterContext';
 import { ListContext } from '../../Contexts/ListContext';
 import { Dropdown } from 'react-bootstrap';
+import { MobileContext } from '../../Contexts/MobileContext';
 
 
 export const GameList = () => {
@@ -34,13 +36,16 @@ export const GameList = () => {
     //const [isLoading, setIsLoading] = useState(true);
     const [aboveThreePages, setAboveThreePages] = useState(false);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
-    const [clickedFilter, setClickedFilter] = useState(false)
+    const [clickedFilter, setClickedFilter] = useState(false);
     // const [ordering, setOrdering] = useState("");
 
     const { setSelectedGame } = useContext(GameContext);
     const { searchText, setSearchText, page, setPage } = useContext(SearchContext);
     const { tags, setTags, genres, setGenres, ordering, setOrdering } = useContext(FilterContext);
     const { isLoading, setIsLoading } = useContext(ListContext);
+    const { isMobile, setIsMobile } = useContext(MobileContext);
+
+    const GAME_PER_PAGE = 35;
 
     useEffect(() => {
         //Initiate all the proper state when the page has changed (or initially loaded when app if first started)
@@ -51,14 +56,14 @@ export const GameList = () => {
         } else if (page < 3) {
             setAboveThreePages(false);
         }
-        const request = Promise.resolve(getGames(page, 40, searchText, getGenresAsString(), getTagsAsString(), String(ordering)).then((item) => setGames(item.data.results))).catch(() => {return;});
+        const request = Promise.resolve(getGames(page, GAME_PER_PAGE, searchText, getGenresAsString(), getTagsAsString(), String(ordering)).then((item) => setGames(item.data.results))).catch(() => {return;});
         Promise.all([request]).then(() => setIsLoading(false));
     }, [page])
 
     useEffect(() => {
         //Timeout so API is not called every time a character is typed
         const timer = setTimeout(() => {
-            const request = Promise.resolve(getGames(page, 40, searchText, getGenresAsString(), getTagsAsString(), String(ordering)).then((item) => setGames(item.data.results))).catch(() => {return;});
+            const request = Promise.resolve(getGames(page, GAME_PER_PAGE, searchText, getGenresAsString(), getTagsAsString(), String(ordering)).then((item) => setGames(item.data.results))).catch(() => {return;});
             Promise.all([request]).then(() => setIsLoading(false));
         }, 1500)
 
@@ -70,14 +75,14 @@ export const GameList = () => {
     useEffect(() => {
         //Take user back to beginning of list of games when filter is updated so they don't stay on page X when they select a new filter
         setPage(1);
-        const request = Promise.resolve(getGames(page, 40, searchText, getGenresAsString(), getTagsAsString(), String(ordering)).then((item) => setGames(item.data.results)).catch(() => {return;}));
+        const request = Promise.resolve(getGames(page, GAME_PER_PAGE, searchText, getGenresAsString(), getTagsAsString(), String(ordering)).then((item) => setGames(item.data.results)).catch(() => {return;}));
         Promise.all([request]).then(() => setIsLoading(false))
     }, [clickedFilter])
 
     useEffect(() => {
         //Take user back to beginning of list of games when sort by has been changed so they don't stay on page X when they select a new way to sort
         setPage(1);
-        const request = Promise.resolve(getGames(page, 40, searchText, getGenresAsString(), getTagsAsString(), String(ordering)).then((item) => setGames(item.data.results))).catch(() => {return;});
+        const request = Promise.resolve(getGames(page, GAME_PER_PAGE, searchText, getGenresAsString(), getTagsAsString(), String(ordering)).then((item) => setGames(item.data.results))).catch(() => {return;});
         Promise.all([request]).then(() => setIsLoading(false));
     }, [ordering])
 
@@ -108,6 +113,10 @@ export const GameList = () => {
     const getTagsAsString = () => {
         const tagsAsString = tags.map((tag) => tag.name);
         return String(tagsAsString.toString());
+    }
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behvaior: 'smooth' });
     }
 
     const handleSort = (e) => {
@@ -225,12 +234,27 @@ export const GameList = () => {
                                 />
                                 </Link>
                                 <div className='info'>
-                                    {/*force string to not show past 45 characters to consistently keep style of each game card showing in game list component*/}
-                                    <p className='name'>{game.name.length < 45 ? game.name.trim() : game.name.substring(0, 45).trim() + '...'}</p>
-                                    <div className='rating-container'>
-                                        <StarRateIcon className='star-icon' fontSize='small'/>
-                                        <p className='rating'>{game.rating}</p>
-                                    </div>
+                                    {/*force string to not show past 45 characters on PC to consistently keep style of each game card showing in game list component,
+                                        20 characters on mobile*/}
+                                    {isMobile ? (
+                                        <>
+                                            <div className='name'>
+                                                <p>{game.name.length < 15 ? game.name.trim() : game.name.substring(0, 15).trim() + '...'}</p>
+                                            </div>
+                                            <div className='rating-container'>
+                                                <StarRateIcon className='star-icon' fontSize='small'/>
+                                                <p className='rating'>{game.rating}</p>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p className='name'>{game.name.length < 45 ? game.name.trim() : game.name.substring(0, 45).trim() + '...'}</p>
+                                            <div className='rating-container'>
+                                                <StarRateIcon className='star-icon' fontSize='small'/>
+                                                <p className='rating'>{game.rating}</p>
+                                            </div>
+                                        </> 
+                                    )}
                                 </div>
                             </div>
                         ))}
@@ -238,7 +262,7 @@ export const GameList = () => {
                     </div>
                     {/*update page state to call next page in api call by calling handleShowMoreClick which increases page state by 1*/}
                     <div className='pages background'>
-                        {games.length >= 40 ? <>
+                        {games.length >= games.length ? (<>
                             {!aboveThreePages ? (
                             <>
                                 <Button id={parseInt(page)} onClick={handlePageChange} variant="dark">1</Button>
@@ -248,18 +272,20 @@ export const GameList = () => {
                                 <Button id={parseInt(page) + 4} onClick={handlePageChange} variant="dark">5</Button>
                             </>
                             ) : (
-                                <>
-                                    <Button id={1} onClick={handlePageChange} variant="dark" size='sm'><KeyboardDoubleArrowLeftIcon className='first-page-button' /></Button>
-                                    <Button id={parseInt(page)} onClick={handlePageChange} variant="dark">{parseInt(page) - 2}</Button>
-                                    <Button id={parseInt(page) + 1} onClick={handlePageChange} variant="dark">{parseInt(page) - 1}</Button>
-                                    <Button id={parseInt(page) + 2} onClick={handlePageChange} variant="dark">{parseInt(page)}</Button>
-                                    <Button id={parseInt(page) + 3} onClick={handlePageChange} variant="dark">{parseInt(page) + 1}</Button>
-                                    <Button id={parseInt(page) + 4} onClick={handlePageChange} variant="dark">{parseInt(page) + 2}</Button>
-                                </>
+                            <>
+                                <Button id={1} onClick={handlePageChange} variant="dark" size='sm'><KeyboardDoubleArrowLeftIcon className='first-page-button' /></Button>
+                                <Button id={parseInt(page)} onClick={handlePageChange} variant="dark">{parseInt(page) - 2}</Button>
+                                <Button id={parseInt(page) + 1} onClick={handlePageChange} variant="dark">{parseInt(page) - 1}</Button>
+                                <Button id={parseInt(page) + 2} onClick={handlePageChange} variant="dark">{parseInt(page)}</Button>
+                                <Button id={parseInt(page) + 3} onClick={handlePageChange} variant="dark">{parseInt(page) + 1}</Button>
+                                <Button id={parseInt(page) + 4} onClick={handlePageChange} variant="dark">{parseInt(page) + 2}</Button>
+                            </>
                             )}
-                        </> : <></>}
-                        
-                        
+                        </>
+                        ) : (<></>)}
+                        <div className='scroll-up'>
+                            <ArrowCircleUpIcon onClick={scrollToTop} fontSize='large' />
+                        </div>
                     </div>
                 </>
             ) : (

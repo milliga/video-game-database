@@ -8,6 +8,7 @@ import '../../Global Styles/GlobalStyle.css';
 
 import { getGameDetails, getGameScreenshots, getGameTrailers, getGameStores } from '../../api/index';
 import { GameContext } from '../../Contexts/GameContext';
+import { MobileContext } from '../../Contexts/MobileContext';
 
 export const Game = () => {
     const [gameDetails, setGameDetails] = useState({});
@@ -21,6 +22,9 @@ export const Game = () => {
     const [gameStores, setGameStores] = useState([]);
     const [foundIdMatch, setFoundIdMatch] = useState(false);
     const [releasedDate, setReleasedDate] = useState("");
+    //const [isMobile, setIsMobile] = useState(false);
+
+    const { isMobile, setIsMobile } = useContext(MobileContext);
 
     const DESCRIPTION_LENGTH = 200;
 
@@ -83,23 +87,27 @@ export const Game = () => {
                         {screenshots.map((screenshot, i) => (
                             <img key={i} onClick={changeMainScreenshot} className='small-image zoom' src={screenshot.image} alt={gameDetails.name} />
                         ))}
-                        <div className='line-break' />
-                        <div className='stores-container drop-shadow'>
-                            <h3 className='store-title'>Stores</h3>
-                            {gameDetails.stores.map((store, i) => (
-                                <React.Fragment key={store.id}>
-                                    {gameStores.map((gameStore) => (
-                                        <React.Fragment key={gameStore.url}>
-                                            {gameStore.id === store.id ? (
-                                                <a className='store-anchor' target='_blank' href={gameStore.url}>
-                                                    <span key={i} className='store text-background'>{store.store.name}</span>
-                                                </a>
-                                            ) : <></>}
+                        {!isMobile ? (
+                            <>
+                                <div className='line-break' />
+                                <div className='stores-container drop-shadow'>
+                                    <h3 className='store-title'>Stores</h3>
+                                    {gameDetails.stores.map((store, i) => (
+                                        <React.Fragment key={store.id}>
+                                            {gameStores.map((gameStore) => (
+                                                <React.Fragment key={gameStore.url}>
+                                                    {gameStore.id === store.id ? (
+                                                        <a className='store-anchor' target='_blank' href={gameStore.url}>
+                                                            <span key={i} className='store text-background'>{store.store.name}</span>
+                                                        </a>
+                                                    ) : <></>}
+                                                </React.Fragment>
+                                            ))}
                                         </React.Fragment>
                                     ))}
-                                </React.Fragment>
-                            ))}
-                        </div>
+                                </div>
+                            </>
+                        ) : (<></>)}
                     </div>
                     
                     <div className='game-info drop-shadow'>
@@ -159,6 +167,30 @@ export const Game = () => {
                             ))}
                         </div>
                     </div>
+
+                    {isMobile ? (
+                        <>
+                            <div className='line-break' />
+                            <div className='stores-container drop-shadow'>
+                            <h3 className='store-title'>Stores</h3>
+                            {gameDetails.stores.map((store, i) => (
+                                <React.Fragment key={store.id}>
+                                    {gameStores.map((gameStore) => (
+                                        <React.Fragment key={gameStore.url}>
+                                            {gameStore.id === store.id ? (
+                                                <a className='store-anchor' target='_blank' href={gameStore.url}>
+                                                    <span key={i} className='store text-background'>{store.store.name}</span>
+                                                </a>
+                                            ) : <></>}
+                                        </React.Fragment>
+                                    ))}
+                                </React.Fragment>
+                            ))}
+                            </div>
+                        </>
+                        ) : (
+                            <></>
+                        )}
                 </div>
             ) : (
                 <div className='loading background'>
