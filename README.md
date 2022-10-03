@@ -12,7 +12,7 @@ If you take a look in src\api\index.js you'll see there are some API keys that a
 
 ## Building
 
-This project is built using yarn. Open a powershell/terminal and ensure you're in the game-database project directory. Next, type <code>yarn build</code> and allow the project to build. In the powershell/terminal console it should tell you that you may serve with <code>serve -s build</code>, but if you're having issues serving the application type <code>yarn serve -s build</code> instead.
+This project is built using yarn. Open powershell/terminal and ensure you're in the game-database project directory. Next, type <code>yarn build</code> and allow the project to build. In the powershell/terminal console it should tell you that you may serve with <code>serve -s build</code>, but if you're having issues serving the application type <code>yarn serve -s build</code> instead.
 
 # How to use
 
