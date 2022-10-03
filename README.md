@@ -1,10 +1,10 @@
 # Video Game Database
 
-This application is a searchable, filterable, sortable video game database that displays information regarding each game made with React,
+This application is a searchable, filterable, sortable video game database that displays information regarding each game made with React.
 
 ## Prerequisites for building
 
-If you'd like to fork and build this application yourself, you'll need to get some API keys and make a file for these API keys:
+If you'd like to fork and build this application yourself, you'll need to get some API keys and make a file for these API keys.
 
 ## API keys
 
