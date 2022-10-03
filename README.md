@@ -22,7 +22,7 @@ To start, if you'd like to begin using the application you can start by scrollin
 
 ![alt text](./README_images/pagination.PNG)
 
-To begin searching, type tht title of the game you wish to search for. Once the page has loaded, you'll see a list of games that match your search. You can use the Sort By function to the top right of the list of games to sort by Created By, Metacritic Rating, Name, User Rating, Released Date.
+To begin searching, type the title of the game you wish to search for. Once the page has loaded, you'll see a list of games that match your search. You can use the Sort By function to the top right of the list of games to sort by Created By, Metacritic Rating, Name, User Rating, Released Date.
 
 ![alt text](./README_images/search-sort.PNG)
 
