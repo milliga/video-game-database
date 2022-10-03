@@ -333,7 +333,15 @@
     border-radius: 5px;
 }
 
-@media only screen and (max-width: 580px) {
+.game-attribution {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 40px 5px 20px 5px;
+}
+
+@media only screen and (max-width: 600px) {
     .no-video {
         padding-top: 5px;
         padding-bottom: 20px;
@@ -367,6 +375,5 @@
     .stores-container {
         min-width: 100vw;
         border-radius: 0px;
-        margin-bottom: 0;
     }
 }

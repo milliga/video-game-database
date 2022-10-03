@@ -25,8 +25,8 @@ img {
 }
 
 .loading-icon {
-    height: 13%;
-    width: 13%;
+    height: 10%;
+    width: 10%;
     animation: fa-spin 1.3s infinite linear;
 }
 

@@ -20,21 +20,6 @@ const App = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
 
-    useEffect(() => {
-            //check if mobile to display certain parts of the page correctly
-            window.addEventListener('resize', changeIsMobile);
-    }, [])
-    
-
-    const changeIsMobile = () => {
-        if(window.innerWidth < 424) {
-            setIsMobile(true)
-        }
-        else {
-            setIsMobile(false);
-        }
-    }
-
     return (
         <>
         <GameContext.Provider value={{ selectedGame, setSelectedGame }}>

@@ -38,7 +38,7 @@ export const GameList = () => {
     const { searchText, setSearchText, page, setPage } = useContext(SearchContext);
     const { tags, genres, ordering, setOrdering } = useContext(FilterContext);
     const { isLoading, setIsLoading } = useContext(ListContext);
-    const { isMobile } = useContext(MobileContext);
+    const { isMobile, setIsMobile } = useContext(MobileContext);
 
     const GAME_PER_PAGE = 35;
 
@@ -46,6 +46,7 @@ export const GameList = () => {
         //Initiate all the proper state when the page has changed (or initially loaded when app if first started)
         setIsLoading(true);
         setSearchText("");
+        changeIsMobile();
         if(page >= 3) { 
             setAboveThreePages(true);
         } else if (page < 3) {
@@ -80,6 +81,15 @@ export const GameList = () => {
         const request = Promise.resolve(getGames(page, GAME_PER_PAGE, searchText, getGenresAsString(), getTagsAsString(), String(ordering)).then((item) => setGames(item.data.results))).catch(() => {return;});
         Promise.all([request]).then(() => setIsLoading(false));
     }, [ordering])
+
+    const changeIsMobile = () => {
+        if(window.innerWidth < 600) {
+            setIsMobile(true)
+        }
+        else {
+            setIsMobile(false);
+        }
+    }
 
     const handlePageChange = (e) => {
         setIsLoading(true);
@@ -283,6 +293,9 @@ export const GameList = () => {
                         <div className='scroll-up'>
                             <ArrowCircleUpIcon onClick={scrollToTop} fontSize='large' />
                         </div>
+                    </div>
+                    <div className='api-attribution background'>
+                        <a href='https://rawg.io/' style={{ textDecoration: 'none' }} target='_blank'>Data supplied by RAWG</a>
                     </div>
                 </>
             ) : (

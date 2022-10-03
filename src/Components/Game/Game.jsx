@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 import { faCircleNotch, faTrailer } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -21,7 +22,7 @@ export const Game = () => {
     const [gameStores, setGameStores] = useState([]);
     const [releasedDate, setReleasedDate] = useState("");
 
-    const { isMobile } = useContext(MobileContext);
+    const { isMobile, setIsMobile } = useContext(MobileContext);
 
     const DESCRIPTION_LENGTH = 200;
 
@@ -31,11 +32,21 @@ export const Game = () => {
         setIsMuted(true);
         setShowMoreDescription(false);
         setGameInformation();
+        //changeIsMobile();
     }, [])
 
     useEffect(() => {
         setMainScreenshot(screenshots[0]);
     }, [isLoading])
+
+    const changeIsMobile = () => {
+        if(window.innerWidth < 600) {
+            setIsMobile(true)
+        }
+        else {
+            setIsMobile(false);
+        }
+    }
 
     const setGameInformation = () => {
         const parsedGame = JSON.parse(localStorage.getItem('game'));
@@ -188,9 +199,11 @@ export const Game = () => {
                             ))}
                             </div>
                         </>
-                        ) : (
-                            <></>
-                        )}
+                        ) : (<></>)
+                    }
+                    <div className='game-attribution background'>
+                        <a href={`https://rawg.io/games/${gameDetails.slug}`} style={{ textDecoration: 'none' }} target='_blank'>Data supplied by RAWG</a>
+                    </div>
                 </div>
             ) : (
                 <div className='loading background'>

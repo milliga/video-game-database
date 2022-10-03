@@ -45,6 +45,7 @@
     text-align: center;
     gap: 10px;
     padding: 30px;
+    flex-wrap: wrap;
 }
 
 .filter {
@@ -142,8 +143,7 @@
 }
 
 .scroll-up {
-    position: absolute;
-    right: 5%;
+    padding: 5px;
 }
 
 .scroll-up:hover {
@@ -156,7 +156,18 @@
     text-align: left;
 }
 
-@media only screen and (max-width: 580px) {
+.api-attribution {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 5px 20px 5px;
+}
+
+.api-attribution:hover {
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 600px) {
     .search {
         padding: 15px 8px 8px 8px;
         width: 80%;
@@ -189,4 +200,10 @@
         padding-left: 0;
     }
     
+}
+
+@media only screen and (max-width: 290px) {
+    .grid-container {
+        row-gap: 80px;
+    }
 }
