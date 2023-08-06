@@ -1,14 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
 
-import { faCircleNotch, faTrailer } from '@fortawesome/free-solid-svg-icons';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import './Game.css';
 import '../../Global Styles/GlobalStyle.css';
 
 import { getGameDetails, getGameScreenshots, getGameTrailers, getGameStores } from '../../api/index';
-import { GameContext } from '../../Contexts/GameContext';
 import { MobileContext } from '../../Contexts/MobileContext';
 
 export const Game = () => {
@@ -32,7 +30,7 @@ export const Game = () => {
         setIsMuted(true);
         setShowMoreDescription(false);
         setGameInformation();
-        //changeIsMobile();
+        changeIsMobile();
     }, [])
 
     useEffect(() => {
@@ -105,7 +103,7 @@ export const Game = () => {
                                             {gameStores.map((gameStore) => (
                                                 <React.Fragment key={gameStore.url}>
                                                     {gameStore.id === store.id ? (
-                                                        <a className='store-anchor' target='_blank' href={gameStore.url}>
+                                                        <a className='store-anchor' target='_blank' href={gameStore.url} rel='noreferrer'>
                                                             <span key={i} className='store text-background'>{store.store.name}</span>
                                                         </a>
                                                     ) : <></>}
@@ -189,7 +187,7 @@ export const Game = () => {
                                     {gameStores.map((gameStore) => (
                                         <React.Fragment key={gameStore.url}>
                                             {gameStore.id === store.id ? (
-                                                <a className='store-anchor' target='_blank' href={gameStore.url}>
+                                                <a className='store-anchor' target='_blank' href={gameStore.url} rel='noreferrer'>
                                                     <span key={i} className='store text-background'>{store.store.name}</span>
                                                 </a>
                                             ) : <></>}
@@ -202,7 +200,7 @@ export const Game = () => {
                         ) : (<></>)
                     }
                     <div className='game-attribution background'>
-                        <a href={`https://rawg.io/games/${gameDetails.slug}`} style={{ textDecoration: 'none' }} target='_blank'>Data supplied by RAWG</a>
+                        <a href={`https://rawg.io/games/${gameDetails.slug}`} style={{ textDecoration: 'none' }} target='_blank' rel='noreferrer'>Data supplied by RAWG</a>
                     </div>
                 </div>
             ) : (

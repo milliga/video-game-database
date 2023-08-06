@@ -295,7 +295,7 @@ export const GameList = () => {
                         </div>
                     </div>
                     <div className='api-attribution background'>
-                        <a href='https://rawg.io/' style={{ textDecoration: 'none' }} target='_blank'>Data supplied by RAWG</a>
+                        <a href='https://rawg.io/' style={{ textDecoration: 'none' }} target='_blank' rel='noreferrer'>Data supplied by RAWG</a>
                     </div>
                 </>
             ) : (
