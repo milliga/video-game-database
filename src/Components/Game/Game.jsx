@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Game.css';
 import '../../Global Styles/GlobalStyle.css';
 
-import { getGameDetails, getGameScreenshots, getGameTrailers, getGameStores } from '../../api/index';
+import { getGameDetails, getGameScreenshots, getGameTrailers, getGameStores, getGameTrailersIGDB } from '../../api/index';
 import { MobileContext } from '../../Contexts/MobileContext';
 
 export const Game = () => {
